@@ -15,17 +15,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
 
 
 //Login Routes
-Route::get('login', 'AuthController@index');
-Route::post('post-login', 'AuthController@postLogin');
+Route::get('login', 'AuthController@index')->name('login')->middleware('guest');
+Route::post('login', 'AuthController@authenticate');
 //Register Routes
 // Route::get('register', 'AuthController@register');
 // Route::post('post-register', 'AuthController@postRegister');
 // Route::get('dashboard', 'AuthController@dashboard');
 //Logout Route
-Route::get('logout', 'AuthController@logout');
+Route::get('/logout','Authcontroller@logout')->name('logout');
 
 Route::get('/home', 'HomeController@index')->name('home');

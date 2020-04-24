@@ -5,10 +5,20 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 header {
-    top: 2px;
-    left: 0px;
-    width: 1920px;
-    height: 147px;
-    background: #E7E7E7 0% 0% no-repeat padding-box;
-    opacity: 1;
+    background: #E7E7E7;
+    img {
+        height: 100px;
+    }
+}
+
+form {
+    width: 37%;
+    margin-top: 10rem;
+    label {
+        font-size: 2rem;
+    }
+}
+
+.st-blue {
+    color: #2F77B8;
 }

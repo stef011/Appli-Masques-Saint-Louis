@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         if(Auth::attempt($credentials)){
             //L'authetification s'est bien déroulée...
-            return redirect()->intended('home');
+            return redirect()->intended('');
         }
         return Redirect::to('login')->withSuccess('Erreur, verifiez vos identifiants, si le problème persiste, veuillez contacter un administrateur.');
     }

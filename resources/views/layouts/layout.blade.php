@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Connexion | Distribution de masques Ville de Saint-Louis</title>
+    <title>@yield('title') | Distribution de masques Ville de Saint-Louis</title>
 
     {{-- Bootstrap Files --}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.css') }}">
@@ -18,16 +18,23 @@
     <script src="{{ asset('Fontawesome/js/all.min.js') }}"></script>
 
     {{-- CSS --}}
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
 <body>
 
-    <header>
+    <header class="container-fluid d-flex p-3">
+        <img src="{{ asset('images/logo-rd.png') }}" alt="Logo Ville de Saint-Louis" class="ml-3">
 
+        <h1 class="st-blue m-auto">
+            Demande de masques | @yield('title')
+        </h1>
     </header>
 
 
+    <div>
+        @yield('content')
+    </div>
 
 
 

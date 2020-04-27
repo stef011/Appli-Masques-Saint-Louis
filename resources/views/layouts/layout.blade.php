@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title') | Distribution de masques Ville de Saint-Louis</title>
 
+    <link rel="icon" sizes="63x94" href="{{ asset('images/logo-stLouis.png') }}" type="image/png">
+
     {{-- Bootstrap Files --}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.css') }}">
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.js') }}"></script>
@@ -32,7 +34,7 @@
     </header>
 
 
-    <div>
+    <div class="m-5">
         @yield('content')
     </div>
 

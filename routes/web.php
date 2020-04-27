@@ -13,10 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware('auth');
-
+Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 
 //Login Routes
 Route::get('login', 'AuthController@index')->name('login')->middleware('guest');
@@ -27,5 +24,3 @@ Route::post('login', 'AuthController@authenticate');
 // Route::get('dashboard', 'AuthController@dashboard');
 //Logout Route
 Route::get('/logout','Authcontroller@logout')->name('logout');
-
-Route::get('/home', 'HomeController@index')->name('home');

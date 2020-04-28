@@ -9,9 +9,9 @@
 
     <link rel="icon" sizes="63x94" href="{{ asset('images/logo-stLouis.png') }}" type="image/png">
 
-    {{-- Bootstrap Files --}}
+    {{-- Bootstrap Files
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.css') }}">
-    <script src="{{ asset('js/bootstrap/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap.bundle.js') }}"></script> --}}
     {{-- jQuerry --}}
     <script src="{{ asset('js/jQuerry.js') }}"></script>
 
@@ -31,6 +31,14 @@
         <h1 class="st-blue m-auto">
             Demande de masques | @yield('title')
         </h1>
+
+        @auth
+        <div>
+            <p class="h4 d-inline mr-3">Connecté en tant que <span
+                    class="font-weight-bold">{{ Auth::user()->login }}</span></p>
+            <a href="{{ route('logout') }}" class="btn btn-lg btn-light btn-shadow">Déconnexion</a>
+        </div>
+        @endauth
     </header>
 
 

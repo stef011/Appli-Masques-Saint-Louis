@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Quartier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,8 +27,7 @@ class HomeController extends Controller
     {
         switch (Auth::user()->login) {
             case 'gestion':
-                
-                return view('gestion');
+                return redirect(route('gestion.index'));
                 break;
             case 'admin':
                 return view('admin');

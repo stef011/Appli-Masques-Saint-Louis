@@ -15,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 
+Route::middleware('gestion')->group(function(){
+    Route::name('gestion.')->group(function(){
+        Route::prefix('gestion')->group(function(){
+            Route::get('/', 'GestionController@index')->name('index');
+            Route::post('/{quartier}/stock', 'QuartierController@stock')->name('post');
+            Route::get('/{quartier}', 'GestionController@show')->name('show');
+        });
+    });
+});
+
 //Login Routes
 Route::get('login', 'AuthController@index')->name('login')->middleware('guest');
 Route::post('login', 'AuthController@authenticate');

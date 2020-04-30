@@ -16,9 +16,9 @@ class CheckGestion
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->login != 'gestion') {
-            return redirect(route('home'));
+        if (Auth::user()->login = 'gestion') {
+            return $next($request);
         }
-        return $next($request);
+        return redirect(route('home'));
     }
 }

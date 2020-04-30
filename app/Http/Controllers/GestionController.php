@@ -7,14 +7,15 @@ use Illuminate\Http\Request;
 
 class GestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('gestion');
+    }
+
     public function index()
     {
-        return view('gestion.index',
-        [
-        'centre' => Quartier::where('nom', 'centre')->first(),
-        'neuweg' => Quartier::where('nom', 'neuweg')->first(),
-        'bourgfelden' => Quartier::where('nom', 'bourgfelden')->first(),
-        ]);
+        $quartiers = Quartier::all();
+        return view('gestion.index', compact('quartiers'));
     }
 
     public function show(Quartier $quartier)

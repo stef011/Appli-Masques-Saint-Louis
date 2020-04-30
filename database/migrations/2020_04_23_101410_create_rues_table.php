@@ -15,6 +15,7 @@ class CreateRuesTable extends Migration
     {
         Schema::create('rues', function (Blueprint $table) {
             $table->id();
+            $table->string('nom');
             $table->timestamps();
         });
     }

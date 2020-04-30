@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title') | Distribution de masques Ville de Saint-Louis</title>
 
-    <link rel="icon" sizes="63x94" href="{{ asset('images/logo-stLouis.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('images/logo-stLouis.png') }}" type="image/png">
 
     {{-- Bootstrap Files
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.css') }}">
@@ -21,6 +21,8 @@
 
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    @yield('head')
 </head>
 
 <body>
@@ -33,6 +35,7 @@
         </h1>
 
         @auth
+
         <div>
             <p class="h4 d-inline mr-3">Connecté en tant que <span
                     class="font-weight-bold">{{ Auth::user()->login }}</span></p>
@@ -47,6 +50,7 @@
     </div>
 
 
+    @yield('script')
 
 </body>
 

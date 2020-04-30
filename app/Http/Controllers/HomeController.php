@@ -32,8 +32,9 @@ class HomeController extends Controller
             case 'admin':
                 return view('admin');
             default:
-                return view('distribution');
+                return redirect(route('distribution.index'));
                 break;
         }
     }
+
 }

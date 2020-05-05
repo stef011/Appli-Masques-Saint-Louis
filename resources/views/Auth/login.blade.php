@@ -7,8 +7,9 @@ Connexion
 
 @section('content')
 
-@auth
-@endguest
+@if (session('success'))
+<p class="alert alert-danger w-50 m-auto"> {{ session('success') }} </p>
+@endif
 
 <form action="login" method="POST" class="mx-auto st-blue">
     @csrf
@@ -31,7 +32,7 @@ Connexion
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary btn-lg float-right mt-5">Se connecter</button>
+    <button type="submit" class="btn btn-lg btn-primary btn-lg float-right mt-5 btn-shadow">Se connecter</button>
 
 </form>
 @endsection

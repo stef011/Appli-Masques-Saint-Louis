@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCitoyensTable extends Migration
 {
-    /**
+    /** 
      * Run the migrations.
      *
      * @return void
@@ -18,7 +18,7 @@ class CreateCitoyensTable extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->date('date_de_naissance');
-            $table->date('date_de_demande');
+            $table->date('date_de_demande')->nullable();
             $table->unsignedBigInteger('foyer_id');
             $table->unsignedBigInteger('quartier_id')->nullable();
             $table->timestamps();

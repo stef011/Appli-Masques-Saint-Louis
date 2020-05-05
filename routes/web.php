@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +14,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware('auth');
+// Route::get('error', 'HomeController@error')->name('error');
+Route::get('/', 'HomeController@index')->name('home');
 
+
+Route::middleware('gestion')->group(function(){
+    Route::name('gestion.')->group(function(){
+        Route::prefix('gestion')->group(function(){
+            Route::get('/', 'GestionController@index')->name('index');
+            Route::post('/{quartier}/stock', 'QuartierController@stock')->name('post');
+            Route::get('/{quartier}', 'GestionController@show')->name('show');
+        });
+    });
+});
+
+
+Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> 'userQuartier'], function () {
+    Route::get('/', 'DistributionController@index')->name('index');
+    Route::get('/{quartier:id}', 'DistributionController@show')->name('show');
+    Route::post('/{quartier:id}/create', 'DistributionController@create')->name('create');
+    Route::post('/{quartier:id}/demande', 'DistributionController@new')->name('demande');
+});
+
+// Autocomplete Route
+Route::post('/citoyens', 'CitoyenController@get')->name('citoyens');
+
+// Check Citoyen route
+Route::post('citoyen', 'CitoyenController@check')->name('citoyen');
 
 //Login Routes
 Route::get('login', 'AuthController@index')->name('login')->middleware('guest');
@@ -27,5 +51,3 @@ Route::post('login', 'AuthController@authenticate');
 // Route::get('dashboard', 'AuthController@dashboard');
 //Logout Route
 Route::get('/logout','Authcontroller@logout')->name('logout');
-
-Route::get('/home', 'HomeController@index')->name('home');

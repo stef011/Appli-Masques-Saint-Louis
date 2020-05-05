@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -7,9 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title') | Distribution de masques Ville de Saint-Louis</title>
 
-    {{-- Bootstrap Files --}}
+    <link rel="icon" href="{{ asset('images/logo-stLouis.png') }}" type="image/png">
+
+    {{-- Bootstrap Files
     <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.css') }}">
-    <script src="{{ asset('js/bootstrap/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap.bundle.js') }}"></script> --}}
     {{-- jQuerry --}}
     <script src="{{ asset('js/jQuerry.js') }}"></script>
 
@@ -19,6 +21,8 @@
 
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    @yield('head')
 </head>
 
 <body>
@@ -29,14 +33,34 @@
         <h1 class="st-blue m-auto">
             Demande de masques | @yield('title')
         </h1>
+
+        @auth
+
+        <div>
+            <p class="h4 d-inline mr-3">Connecté en tant que <span
+                    class="font-weight-bold">{{ Auth::user()->login }}</span></p>
+            <a href="{{ route('logout') }}" class="btn btn-lg btn-light btn-shadow">Déconnexion</a>
+            @if (Route::current()->getPrefix() == '/distribution')
+            <div>
+                <p class="h4 mt-4">Il reste <span class="font-weight-bold">{{ $quartier->stock }}</span> masques dans ce
+                    quartier.
+                </p>
+            </div>
+            @endif
+        </div>
+        @endauth
+
+
     </header>
 
 
-    <div>
+    <div class="m-5">
         @yield('content')
+
     </div>
 
 
+    @yield('script')
 
 </body>
 

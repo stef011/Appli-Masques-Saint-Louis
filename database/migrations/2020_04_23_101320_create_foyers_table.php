@@ -16,10 +16,10 @@ class CreateFoyersTable extends Migration
         Schema::create('foyers', function (Blueprint $table) {
             $table->id();
             $table->string('numero');
-            $table->unsignedBigInteger('id_rue');
+            $table->unsignedBigInteger('rue_id');
 
 
-            $table->foreign('id_rue')
+            $table->foreign('rue_id')
                 ->references('id')
                 ->on('rues');
         });

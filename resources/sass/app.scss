@@ -1,11 +1,11 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 // Variables
-@import 'variables';
+@import "variables";
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 header {
-    background: #E7E7E7;
+    background: #e7e7e7;
     img {
         height: 100px;
     }
@@ -20,5 +20,41 @@ form {
 }
 
 .st-blue {
-    color: #2F77B8;
+    color: #2f77b8;
+}
+
+.btn-shadow {
+    box-shadow: 1px 3px 3px #00000066;
+}
+
+.btn {
+    border-radius: 10px;
+}
+
+.mt-10 {
+    margin-top: 10rem;
+}
+
+@media screen and (min-width: 1200px) {
+    #validateStock {
+        position: absolute;
+        bottom: 10rem;
+        right: 20rem;
+    }
+    #cancelStock {
+        position: absolute;
+        bottom: 10rem;
+        left: 15rem;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    #validateStock {
+        position: relative;
+        display: block;
+    }
+    #cancelStock {
+        position: relative;
+        display: block;
+    }
 }

@@ -7,42 +7,49 @@ Quartier {{ $quartier->nom }}
 @section('head')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 {{-- JQuery UI --}}
-{{-- <link rel="stylesheet" href="{{ asset('jquery-ui/jquery-ui.min.css') }}">
-<script src="{{ asset('jquery-ui/jquery-ui.min.js') }}"></script> --}}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="{{ asset('jquery-ui/jquery-ui.min.css') }}">
+<script src="{{ asset('jquery-ui/jquery-ui.min.js') }}"></script>
+{{-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
 @endsection
 
 @section('content')
 <div class="w-75 m-auto">
+    @if (session('success'))
+    <p class="alert alert-success w-50 m-auto"> {{ session('success') }} </p>
+    @endif
     <div class="mt-5">
         <form action="{{ route('distribution.demande', ['quartier'=> $quartier->id]) }}" method="POST"
             class="st-blue w-75 m-auto d-flex flex-column">
             @csrf
+            <input type="number" name="id" id="id" hidden>
             <div class="form-row justify-content-between">
                 <div class="form-group col-md-5 ">
-                    <label for="nom">Nom</label>
-                    <input required type="text" name="nom" id="nom" class="form-control form-control-lg">
+                    <label for="nom">Nom (Marital)</label>
+                    <input required type="text" name="nom" id="nom" value="{{ old('nom') }}"
+                        class="form-control form-control-lg">
                 </div>
                 <div class="form-group col-md-5">
                     <label for="dateNaissance">Date de Naissance</label>
-                    <input required type="date" name="dateNaissance" id="date" class="form-control form-control-lg">
+                    <input required type="date" name="dateNaissance" id="date" value="{{ old('dateNaissance') }}"
+                        class="form-control form-control-lg">
                 </div>
             </div>
             <div class="form-row mt-auto justify-content-between">
                 <div class="form-group col-md-5">
                     <label for="prenom">Prénom</label>
-                    <input required type="text" name="prenom" id="prenom" class="form-control form-control-lg">
+                    <input required type="text" name="prenom" id="prenom" value="{{ old('prenom') }}"
+                        class="form-control form-control-lg">
                 </div>
 
                 <div class="form-group col-md-5">
                     <label for="numero">Adresse</label>
                     <div class="input-group">
-                        <input required type="text" name="numero" id="numero" placeholder="N°"
-                            class="form-control form-control-lg col-2">
-                        <input required type="text" name="rue" id="rue" placeholder="Rue"
+                        <input required type="text" name="numero" id="numero" value="{{ old('numero') }}"
+                            placeholder="N°" class="form-control form-control-lg col-2">
+                        <input required type="text" name="rue" id="rue" value="{{ old('rue') }}" placeholder="Rue"
                             class="form-control form-control-lg"
                             style="border-top-right-radius: 0.25rem;border-bottom-right-radius: 0.25rem;">
                     </div>
@@ -91,6 +98,7 @@ Quartier {{ $quartier->nom }}
             },
             select: function (event, ui) {
                 // Set selection
+                $('#id').val(ui.item.id);
                 $('#nom').val(ui.item.nom);
                 $('#prenom').val(ui.item.prenom);
                 $('#date').val(ui.item.dob);

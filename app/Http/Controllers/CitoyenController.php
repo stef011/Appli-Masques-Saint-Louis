@@ -11,16 +11,12 @@ use Illuminate\Support\Facades\DB;
 class CitoyenController extends Controller
 {
     
-
-    public function getAll()
-    {
-        // $citoyens = DB::table('citoyens')->select(DB::raw('CONCAT(id, "|",nom," ", prenom, " ", date_de_naissance)'))->get();
-        $json = json_encode(Citoyen::select('nom', 'prenom', 'date_de_naissance')->get());
-        return $json;
-    }
-
     public function get(Request $request)
     {
+        request()->validate([
+            'nom'=> 'string'
+        ]);
+
         $search = $request->nom;
         if ($search == '') {
             $citoyens = Citoyen::orderby('nom','asc')->limit(5)->get();
@@ -30,10 +26,21 @@ class CitoyenController extends Controller
         
         $response = array();
         foreach ($citoyens as $citoyen) {
-            $response[] = array('nom'=>$citoyen->nom, 'prenom'=>$citoyen->prenom, 'dob'=>$citoyen->date_de_naissance,'numero'=>$citoyen->foyer->numero, 'rue'=>$citoyen->foyer->rue->nom); ;
+            $response[$citoyen->id] = array('id'=>$citoyen->id, 'nom'=>$citoyen->nom, 'prenom'=>$citoyen->prenom, 'dob'=>$citoyen->date_de_naissance,'numero'=>$citoyen->foyer->numero, 'rue'=>$citoyen->foyer->rue->nom); ;
         }
 
         return json_encode($response);
 
+    }
+
+// Return true si le citoyen à déjà reçu son masque.
+    public function check(Request $request)
+    {
+        $citoyen = Citoyen::find($request->id);
+        if ($citoyen->date_de_demande != NULL) {
+            return true;
+        }else{
+        return false;
+        }
     }
 }

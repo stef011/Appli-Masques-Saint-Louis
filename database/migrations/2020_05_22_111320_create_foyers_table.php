@@ -17,11 +17,22 @@ class CreateFoyersTable extends Migration
             $table->id();
             $table->string('numero');
             $table->unsignedBigInteger('rue_id');
+            $table->unsignedBigInteger('inscription_id');
+            $table->unsignedBigInteger('quartier_id')->nullable();
 
 
             $table->foreign('rue_id')
                 ->references('id')
                 ->on('rues');
+        
+            $table->foreign('inscription_id')
+                ->references('id')
+                ->on('inscriptions');
+
+            $table->foreign('quartier_id')
+            ->references('id')
+            ->on('quartiers');
+        
         });
     }
 

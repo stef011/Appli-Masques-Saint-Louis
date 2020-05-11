@@ -28,9 +28,10 @@
 <body>
 
     <header class="container-fluid d-flex p-3">
-        <img src="{{ asset('images/logo-rd.png') }}" alt="Logo Ville de Saint-Louis" class="ml-3">
+        <a href="/"><img src="{{ asset('images/logo-rd.png') }}" alt="Logo Ville de Saint-Louis"
+                class="ml-3 d-sm-none d-xl-block"></a>
 
-        <h1 class="st-blue m-auto">
+        <h1 class="st-blue m-auto d-sm-none d-xl-block">
             Demande de masques | @yield('title')
         </h1>
 
@@ -49,6 +50,12 @@
             @endif
         </div>
         @endauth
+        @guest
+        <div>
+            <a href="{{ route('login') }}" class="btn btn-primary btn-shadow mt5 btn-lg " @yield('hidden')>Se
+                Connecter</a>
+        </div>
+        @endguest
 
 
     </header>

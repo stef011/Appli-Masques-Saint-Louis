@@ -13,10 +13,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -25,16 +25,25 @@ class HomeController extends Controller
      */
     public function index()
     {
-        switch (Auth::user()->login) {
-            case 'gestion':
-                return redirect(route('gestion.index'));
+        if(Auth::check()){
+                switch (Auth::user()->role->role) {
+                case 'gestion':
+                    return redirect(route('gestion.index'));
+                    break;
+                case 'admin':
+                    return redirect(route('admin.index'));
                 break;
-            case 'admin':
-                return view('admin');
-            default:
-                return redirect(route('distribution.index'));
+                case 'preinscription':
+                    return redirect(route('preinscription.index'));
                 break;
+                case 'distribution':
+                    return redirect(route('distribution.index'));
+                break;
+                default:
+                    return view('accueil');
+            }
         }
+        return view('accueil');
     }
 
 }

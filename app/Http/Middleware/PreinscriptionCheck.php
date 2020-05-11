@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\Auth;
 
 use Closure;
 
-class CheckGestion
+class PreinscriptionCheck
 {
     /**
      * Handle an incoming request.
@@ -16,9 +15,9 @@ class CheckGestion
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->role->role = 'gestion') {
-            return $next($request);
-        }
+        if (Auth::user()->role->role != 'preinscription') {
         return redirect(route('home'));
+        }
+        return $next($request);
     }
 }

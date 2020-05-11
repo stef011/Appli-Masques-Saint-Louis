@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
@@ -15,10 +16,28 @@ use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 */
 
 // Route::get('error', 'HomeController@error')->name('error');
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('accueil');
+
+// TODO: Remove Test Route
+Route::get('/test', function(){
+    return view('inscription.show');
+});
 
 
-Route::middleware('gestion')->group(function(){
+// Routes d'inscription
+Route::group(['prefix'=>'inscription', 'as'=>'inscription.'], function()
+{
+    Route::get('/', 'InscriptionController@index')->name('index');
+    Route::post('/add', 'InscriptionController@add')->name('add');
+    Route::get('{membre}/remove', 'InscriptionController@remove')->name('remove');
+    Route::get('/show', 'InscriptionController@showGet')->name('show');
+    Route::post('/show', 'InscriptionController@show')->name('show');
+    Route::get('/confirmed', 'InscriptionController@confirm')->name('confirm');
+});
+
+
+
+Route::middleware(['gestion','auth'])->group(function(){
     Route::name('gestion.')->group(function(){
         Route::prefix('gestion')->group(function(){
             Route::get('/', 'GestionController@index')->name('index');
@@ -28,16 +47,35 @@ Route::middleware('gestion')->group(function(){
     });
 });
 
-
-Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> 'userQuartier'], function () {
+// Distribution
+Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> ['userQuartier','auth']], function () {
     Route::get('/', 'DistributionController@index')->name('index');
     Route::get('/{quartier:id}', 'DistributionController@show')->name('show');
     Route::post('/{quartier:id}/create', 'DistributionController@create')->name('create');
     Route::post('/{quartier:id}/demande', 'DistributionController@new')->name('demande');
 });
 
+// Admin Routes
+Route::group(['prefix'=>'admin', 'as'=>'admin.','middleware'=>['adminCheck','auth']],function (){
+    Route::get('/', 'AdminController@index')->name('index');
+    Route::get('/{user:id}/password', 'AdminController@password')->name('password');
+    Route::post('/{user:id}/password', 'AdminController@passwordChange')->name('password');
+    Route::get('/{user:id}/edit', 'AdminController@edit')->name('edit');
+    Route::put('/{user:id}/update', 'AdminController@update')->name('update');
+    Route::get('/add', 'AdminController@addUser')->name('add');
+    Route::post('/add', 'AdminController@createUser')->name('add');
+    Route::get('/{user:id}/delete', 'AdminController@delete')->name('delete');
+});
+
+// Preinscription routes
+Route::group(['prefix'=>'preinscription', 'as'=>'preinscription.', 'middleware'=>['auth', 'preinscriptionCheck']], function(){
+    Route::get('/', 'PreinscriptionController@index')->name('index');
+});
+
+
 // Autocomplete Route
 Route::post('/citoyens', 'CitoyenController@get')->name('citoyens');
+Route::post('/rues', 'RueController@get')->name('rues');
 
 // Check Citoyen route
 Route::post('citoyen', 'CitoyenController@check')->name('citoyen');

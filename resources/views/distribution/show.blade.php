@@ -22,7 +22,7 @@ Quartier {{ $quartier->nom }}
     @endif
     <div class="mt-5">
         <form action="{{ route('distribution.demande', ['quartier'=> $quartier->id]) }}" method="POST"
-            class="st-blue w-75 m-auto d-flex flex-column">
+            class="st-blue w-75 m-auto d-flex flex-column" style="max-width: 60rem !important;">
             @csrf
             <input type="number" name="id" id="id" hidden>
             <div class="form-row justify-content-between">

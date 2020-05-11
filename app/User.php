@@ -30,15 +30,31 @@ class User extends Authenticatable
     ];
 
     // Fonction pour créer un nouvel utilisateur
-    public function create(String $login, String $password)
+    public function create(String $login, String $password, Int $role)
     {
         $this->login = $login;
         $this->password = Hash::make($password);
+        $this->role()->associate(Role::find($role));
         $this->save();
-        if(Quartier::where('nom', $login)->get()->count() >0){
-            $this->quartiers()->attach(Quartier::where('nom',$login)->get());
-        }
+
         return $this;
+    }
+    public function createWithQuartier(String $login, String $password, Int $role, $quartier)
+    {
+        $this->login = $login;
+        $this->password = Hash::make($password);
+        $this->role()->associate($role);
+        $this->save();
+        $this->quartiers()->attach($quartier);
+        
+        return $this;
+    }
+
+
+    public function changePass($password)
+    {
+        $this->password = Hash::make($password);
+        $this->save();
     }
 
 
@@ -46,5 +62,8 @@ class User extends Authenticatable
     public function quartiers()
     {
         return $this->belongsToMany(Quartier::class);
+    }
+    public function role(){
+        return $this->belongsTo(Role::class);
     }
 }

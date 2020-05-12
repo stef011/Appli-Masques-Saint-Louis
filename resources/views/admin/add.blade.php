@@ -66,7 +66,7 @@ Ajouter un Utlisiateur
         }
         $("#role").change(function () {
             var role = $(this).children("option:selected").val();
-            if (role == 4) {
+            if (role == distId) {
                 $('#selectionQuartiers').removeClass('d-none');
             } else {
                 $('#selectionQuartiers').addClass('d-none');

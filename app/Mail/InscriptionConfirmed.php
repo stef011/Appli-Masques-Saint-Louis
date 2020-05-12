@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Inscription;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,14 +12,16 @@ class InscriptionConfirmed extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $inscription;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Inscription $inscription)
     {
-        //
+        $this->inscription = $inscription;
     }
 
     /**
@@ -28,6 +31,6 @@ class InscriptionConfirmed extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->subject('Inscription Confirmée')->view('mail.confirmed');
     }
 }

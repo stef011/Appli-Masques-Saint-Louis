@@ -6,8 +6,10 @@ use App\Quartier;
 use App\Citoyen;
 use App\Inscription;
 use App\Foyer;
+use App\Mail\InscriptionConfirmed;
 use App\Rue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class InscriptionController extends Controller
@@ -31,7 +33,7 @@ class InscriptionController extends Controller
             'quartier'=>'required|integer',
             'prioritaire'=>'required|boolean',
         ]);
-        $inscription = new Inscription(['numero'=>uniqid()]);
+        $inscription = new Inscription(['numero'=>hash('crc32b',uniqid())]);
 
         $foyer = new Foyer(['numero'=>request('numero')]);
         $foyer->rue()->associate(Rue::find(request('rueid')));
@@ -136,6 +138,9 @@ class InscriptionController extends Controller
             $citoyen->foyer()->associate($foyer);
             $citoyen->save();
         }
+        $chef = request()->session()->get('citoyen');
+
+        Mail::to($chef->email)->queue(new InscriptionConfirmed($inscription));
 
         return view('inscription.confirmed',compact(['inscription']));
     }

@@ -25,8 +25,11 @@ hidden
             style="max-width: 60rem !important;">
             <h2 class="h1 mb-3">Vos coordonnées</h2>
             @if ($errors->any())
+            @if ($errors->has('email'))
+            <p class="alert alert-danger">Vous êtes déjà inscrit.</p>
+            @else
             <p class="alert alert-danger">Le formulaire a mal été rempli</p>
-
+            @endif
             @endif
             @csrf
             <div class="form-row justify-content-between">

@@ -21,8 +21,6 @@
 
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-    @yield('head')
 </head>
 
 <body>
@@ -34,30 +32,6 @@
         <h1 class="st-blue m-auto d-none d-sm-block">
             Demande de masques | @yield('title')
         </h1>
-
-        @auth
-
-        <div>
-            <p class="h4 d-inline mr-3">Connecté en tant que <span
-                    class="font-weight-bold">{{ Auth::user()->login }}</span></p>
-            <a href="{{ route('logout') }}" class="btn btn-lg btn-light btn-shadow">Déconnexion</a>
-            @if (Route::current()->getPrefix() == '/distribution')
-            <div>
-                <p class="h4 mt-4">Il reste <span class="font-weight-bold">{{ $quartier->stock }}</span> masques dans ce
-                    quartier.
-                </p>
-            </div>
-            @endif
-        </div>
-        @endauth
-        @guest
-        <div>
-            <a href="{{ route('login') }}" class="btn btn-primary btn-shadow mt5 btn-lg " @yield('hidden')>Se
-                Connecter</a>
-        </div>
-        @endguest
-
-
     </header>
 
 

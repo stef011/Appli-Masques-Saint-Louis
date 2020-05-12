@@ -70,15 +70,14 @@ class InscriptionController extends Controller
     public function add()
     {
 
-        if(request('prioritaire')==null){
-            request()->request->add(['prioritaire'=>false]);
-        }
+        // if(request('prioritaire')==null){
+        //     request()->request->add(['prioritaire'=>false]);
+        // }
         // dd(request('prioritaire'));
         request()->validate([
             'nom'=>'required|string',
             'prenom'=>'required|string',
             'dateNaissance'=>'required|date',
-            'prioritaire'=>'required|boolean',
         ]);
 
 
@@ -90,7 +89,7 @@ class InscriptionController extends Controller
             'nom'=>request('nom'),
             'prenom'=>request('prenom'),
             'date_de_naissance'=>request('dateNaissance'),
-            'prioritaire'=>boolval(request('prioritaire')),
+            'prioritaire'=>boolval($citoyen->prioritaire),
         ]);
 
         $membres->push($membre);
@@ -125,23 +124,30 @@ class InscriptionController extends Controller
 
     public function confirm()
     {
-        $membres = request()->session()->get('membres');
-        $foyer = request()->session()->get('foyer');
+        if(null !== request()->session()->get('citoyen')){
+            $membres = request()->session()->get('membres');
+            $foyer = request()->session()->get('foyer');
+            $inscription = request()->session()->get('inscription');
+
+            $inscription->save();
+
+            $foyer->inscription()->associate($inscription);
+            $foyer->save();
+
+            foreach($membres as $citoyen){
+                $citoyen->foyer()->associate($foyer);
+                $citoyen->save();
+            }
+            $chef = request()->session()->get('citoyen');
+
+            Mail::to($chef->email)->queue(new InscriptionConfirmed($inscription));
+        }
+
         $inscription = request()->session()->get('inscription');
 
-        $inscription->save();
-
-        $foyer->inscription()->associate($inscription);
-        $foyer->save();
-
-        foreach($membres as $citoyen){
-            $citoyen->foyer()->associate($foyer);
-            $citoyen->save();
-        }
-        $chef = request()->session()->get('citoyen');
-
-        Mail::to($chef->email)->queue(new InscriptionConfirmed($inscription));
+        request()->session()->forget(['citoyen','membres','foyer']);
 
         return view('inscription.confirmed',compact(['inscription']));
+
     }
 }

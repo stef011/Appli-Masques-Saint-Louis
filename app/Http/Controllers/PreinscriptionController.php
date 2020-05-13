@@ -142,11 +142,33 @@ public function confirm()
     }
 
 
-    // public function search()
-    // {
-    //     request()->validate([
-    //         'search'->'required',
-    //     ]);
-    //     $results = Citoyens::cont
-    // }
+    public function list()
+    {
+        if(request('prio')=='prio'){
+            $citoyens = Citoyen::orderBy('prioritaire', 'desc')->simplePaginate('25');
+        }else{
+            $citoyens = Citoyen::simplePaginate('25');
+        }
+        
+
+
+        return view('preinscription.list', compact('citoyens'));
+        
+    }
+
+
+    public function search()
+    {
+        request()->validate([
+            'search'=>'required',
+        ]);
+        $citoyens = Citoyen::whereHas('foyer.inscription',function($querry)
+        {
+            $querry->where('numero', 'like', '%'.request('search').'%');
+        })
+        ->orwhere('nom', 'like', '%'.request('search').'%')
+        ->orWhere('prenom', 'like','%'.request('search').'%')
+        ->paginate('25');
+        return view('preinscription.list', compact('citoyens'));
+    }
 }

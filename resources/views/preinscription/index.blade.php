@@ -126,8 +126,12 @@ Pré-Inscription
 
             <div class="form-row mt-5 justify-content-between">
                 <button type="reset" class="btn btn-shadow btn-danger">Réinitialiser</button>
+                <a href="{{ route('preinscription.list') }}" class="btn btn-secondary btn-shadow" role="button">Liste
+                    des inscrits</a>
                 <button type="submit" class="btn btn-shadow btn-success">Valider</button>
             </div>
+
+
         </form>
         <p class="float-right">Etape 1/2</p>
     </div>

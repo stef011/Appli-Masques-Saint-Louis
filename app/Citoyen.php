@@ -82,5 +82,8 @@ class Citoyen extends Model
     {
         return $this->foyer->quartier;
     }
+    public function inscription(){
+        return $this->foyer->inscription;
+    }
 
 }

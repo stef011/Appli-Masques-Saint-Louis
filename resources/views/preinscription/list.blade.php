@@ -6,11 +6,15 @@ Liste des préinscriptions
 
 @section('content')
 <div class="mw-10 m-auto">
-    <form action="{{ route('preinscription.search') }}" method="post" class="form-inline">
+    <form action="{{ route('preinscription.search') }}" method="post" class="d-flex flex-column w-100">
         @csrf
-        <div class="form-group">
-            <input type="search" name="search" id="search" placeholder="search" class="form-control col-10">
-            <button type="submit" class="btn btn-primary btn-shadow">Rechercher</button>
+        <div class="form-row form-group col-10">
+            <div class="form-group">
+                <input type="search" name="search" id="search" placeholder="Rechercher" class="form-control">
+            </div>
+            <div class="form-group col-2">
+                <button type="submit" class="btn btn-primary btn-shadow">Rechercher</button>
+            </div>
         </div>
     </form>
     <table class="table">
@@ -22,6 +26,7 @@ Liste des préinscriptions
             <th scope="col"><a href="{{ route('preinscription.list', ['sort'=>'prio']) }}">Priorité</a></th>
             <th scope="col">Numéro de téléphone</th>
             <th scope="col">Numéro de demande</th>
+            <th scope="col">Nombres de personnes du foyer</th>
         </thead>
         <tbody>
             @foreach ($citoyens as $key=>$citoyen)
@@ -33,6 +38,7 @@ Liste des préinscriptions
                 <td>{{ $citoyen->prioritaire == 1 ? 'Oui' : 'Non' }}</td>
                 <td>{{ $citoyen->tel }}</td>
                 <td>{{ $citoyen->inscription()->numero }}</td>
+                <td>{{ $citoyen->foyer->nb_masques }}</td>
             </tr>
             @endforeach
         </tbody>

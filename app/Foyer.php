@@ -9,7 +9,8 @@ class Foyer extends Model
 {
 
     protected $fillable = [
-        'numero'
+        'numero',
+        'nb_masques'
     ];
     public $timestamps = false;
 

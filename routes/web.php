@@ -33,7 +33,11 @@ Route::group(['prefix'=>'inscription', 'as'=>'inscription.'], function()
     Route::get('/show', 'InscriptionController@showGet')->name('show');
     Route::post('/show', 'InscriptionController@show')->name('show');
     Route::get('/confirmed', 'InscriptionController@confirm')->name('confirm');
-    Route::get('/edit', 'InscriptionController@edit')->name('edit');
+    Route::get('/get', 'InscriptionController@get')->name('get');
+    Route::post('/get', 'InscriptionController@get')->name('get');
+    Route::get('/{inscription:numero}/edit', 'InscriptionController@edit')->name('edit');
+    Route::put('/{inscription:numero}/edit', 'InscriptionController@editPut')->name('edit');
+
 });
 
 
@@ -76,8 +80,9 @@ Route::group(['prefix'=>'preinscription', 'as'=>'preinscription.', 'middleware'=
     Route::post('/add', 'PreinscriptionController@add')->name('add');
     Route::get('/{membre}/remove', 'PreinscriptionController@remove')->name('remove');
     Route::get('/confirmed', 'PreinscriptionController@confirm')->name('confirm');
-    // Route::get('/search', 'PreinscriptionController@display')->name('search');
-    // Route::post('/search', 'PreinscriptionController@search')->name('search');
+    Route::get('/list', 'PreinscriptionController@list')->name('list');
+    Route::post('/search', 'PreinscriptionController@search')->name('search');
+    Route::get('/search', 'PreinscriptionController@list')->name('search');
 });
 
 

@@ -29,10 +29,11 @@ class PreinscriptionController extends Controller
             'tel'=>'required|numeric',
             'quartier'=>'required|integer',
             'prioritaire'=>'required|boolean',
+            'nb_masques'=>'nullable|integer',
         ]);
         $inscription = new Inscription(['numero'=>hash('crc32b',uniqid())]);
 
-        $foyer = new Foyer(['numero'=>request('numero')]);
+        $foyer = new Foyer(['numero'=>request('numero'), 'nb_masques'=>request('nb_masques')]);
         $foyer->rue()->associate(Rue::find(request('rueid')));
         $foyer->quartier()->associate(request('quartier'));
 

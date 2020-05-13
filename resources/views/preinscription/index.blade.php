@@ -114,13 +114,20 @@ Pré-Inscription
                     <p class="invalid-feedback">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="form-text col-md-5 mt-4">
+                <div class="form-text col-md-5 mt-3">
                     <p class="h3">* Vous êtes prioritaire si:
                         <ul class="h4">
                             <li>Vous utilisez les transports en commun</li>
-                            <li>Vous êtes à risque</li>
+                            <li>Vous êtes personne à risque</li>
                         </ul>
                     </p>
+                </div>
+            </div>
+
+            <div class="form-row mt-auto justify-content-between">
+                <div class="col-md-5">
+                    <label for="nb_masques">Nombre de masques (inscription papier)</label>
+                    <input type="number" name="nb_masques" id="nb_masques" class="form-control">
                 </div>
             </div>
 

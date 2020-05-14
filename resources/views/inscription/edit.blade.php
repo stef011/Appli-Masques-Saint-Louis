@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('title')
-Inscription
+Modification
 @endsection
 
 @section('head')
@@ -21,12 +21,16 @@ hidden
     <p class="alert alert-success w-50 m-auto"> {{ session('success') }} </p>
     @endif
     <div class="mt-5">
-        <form action="{{ route('inscription.show') }}" method="POST" class="st-blue mw-10 m-auto d-flex flex-column"
-            style="max-width: 60rem !important;">
+        <form action="{{ route('inscription.edit', ['inscription'=>$inscription->numero]) }}" method="POST"
+            class="st-blue mw-10 m-auto d-flex flex-column" style="max-width: 60rem !important;">
+
+            @method('PUT')
+
+
             <h2 class="h1 mb-3">Vos coordonnées</h2>
             @if ($errors->any())
             @if ($errors->has('email'))
-            <p class="alert alert-danger">Vous êtes déjà inscrit.</p>
+            <p class="alert alert-danger">Adresse email déjà utilisée.</p>
             @else
             <p class="alert alert-danger">Le formulaire a mal été rempli</p>
             @endif
@@ -35,7 +39,8 @@ hidden
             <div class="form-row justify-content-between">
                 <div class="form-group col-md-5 ">
                     <label for="nom">Nom (Marital)</label>
-                    <input required type="text" name="nom" id="nom" value="{{ old('nom') }}"
+                    <input required type="text" name="nom" id="nom"
+                        value="{{ old('nom',$inscription->citoyens()->where('email','!=','')->first()->nom) }}"
                         class="form-control @error('nom') is-invalid @enderror" required>
                     @error('nom')
                     <p class="invalid-feedback">{{ $message }}</p>
@@ -44,7 +49,7 @@ hidden
                 <div class="form-group col-md-5">
                     <label for="dateNaissance">Date de Naissance</label>
                     <input required type="date" name="date_de_naissance" id="date"
-                        value="{{ old('date_de_naissance') }}"
+                        value="{{ old('date_de_naissance',$inscription->citoyens()->where('email','!=','')->first()->date_de_naissance) }}"
                         class="form-control @error('date_de_naissance') is-invalid @enderror " required>
                     @error('date_de_naissance')
                     <p class="invalid-feedback">{{ $message }}</p>
@@ -54,7 +59,8 @@ hidden
             <div class="form-row mt-auto justify-content-between">
                 <div class="form-group col-md-5">
                     <label for="prenom">Prénom</label>
-                    <input required type="text" name="prenom" id="prenom" value="{{ old('prenom') }}"
+                    <input required type="text" name="prenom" id="prenom"
+                        value="{{ old('prenom',$inscription->citoyens()->where('email','!=','')->first()->prenom) }}"
                         class="form-control @error('prenom') is-invalid @enderror" required>
                     @error('prenom')
                     <p class="invalid-feedback">{{ $message }}</p>
@@ -64,11 +70,14 @@ hidden
                 <div class="form-group col-md-5">
                     <label for="numero">Adresse</label>
                     <div class="input-group">
-                        <input required type="text" name="numero" id="numero" value="{{ old('numero') }}"
-                            placeholder="N°" class="form-control col-2 @error('numero')
+                        <input required type="text" name="numero" id="numero"
+                            value="{{ old('numero',$inscription->foyer->numero) }}" placeholder="N°" class="form-control
+                            col-2 @error('numero')
                             is-invalid @enderror" required>
-                        <input type="number" name="rueid" id="rueid" value="{{ old('rueid') }}" hidden>
-                        <input required type="text" name="rue" id="rue" value="{{ old('rue') }}" placeholder="Rue"
+                        <input type="number" name="rueid" id="rueid"
+                            value="{{ old('rueid', $inscription->foyer->rue_id) }}" hidden>
+                        <input required type="text" name="rue" id="rue"
+                            value="{{ old('rue',$inscription->foyer->rue->nom) }}" placeholder="Rue"
                             class="form-control @error('rueid') is-invalid @enderror"
                             style="border-top-right-radius: 0.25rem;border-bottom-right-radius: 0.25rem;" required>
                         @error('rue')
@@ -87,7 +96,9 @@ hidden
                 <div class="form-group col-md-5">
                     <label for="mail">Adresse E-mail</label>
                     <input type="email" name="email" id="email"
-                        class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required>
+                        class="form-control @error('email') is-invalid @enderror"
+                        value="{{ old('email',$inscription->citoyens()->where('email','!=','')->first()->email) }}"
+                        required>
                     @error('email')
                     <p class="invalid-feedback">{{ $message }}</p>
                     @enderror
@@ -98,7 +109,8 @@ hidden
                         required>
                         @foreach ($quartiers as $quartier)
                         @if ($quartier->nom != 'Boîte aux lettres')
-                        <option value="{{ $quartier->id }}">{{ $quartier->nom }}</option>
+                        <option value="{{ $quartier->id }}" @if($quartier->id ==
+                            $inscription->foyer->quartier_id) selected @endif>{{ $quartier->nom }}</option>
                         @endif
                         @endforeach
                     </select>
@@ -113,8 +125,11 @@ hidden
                     <label for="prioritaire">Prioritaire *</label>
                     <select name="prioritaire" id="prioritaire"
                         class="form-control @error('prioritaire') is-invalid @enderror">
-                        <option value="0">Non</option>
-                        <option value="1">Oui</option>
+                        <option value="0" @if($inscription->citoyens()->where('email','!=','')->first()->prioritaire ==
+                            false) selected @endif>Non
+                        </option>
+                        <option value="1" @if($inscription->citoyens()->where('email','!=','')->first()->prioritaire ==
+                            true) selected @endif>Oui</option>
                     </select>
                     @error('prioritaire')
                     <p class="invalid-feedback">{{ $message }}</p>

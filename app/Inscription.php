@@ -12,4 +12,8 @@ class Inscription extends Model
     {
         return $this->hasOne(Foyer::class);
     }
+    public function citoyens()
+    {
+        return $this->foyer->citoyens;
+    }
 }

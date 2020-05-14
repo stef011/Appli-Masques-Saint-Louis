@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Citoyen;
+use App\Inscription;
 use App\Quartier;
 use App\User;
 use Illuminate\Cache\RetrievesMultipleKeys;
@@ -24,7 +25,8 @@ class DistributionController extends Controller
         if($quartier->count() > 1){
             return view('distribution.index', compact('quartier'));
         }
-        return view('distribution.show', ['quartier'=>$quartier->first()]);
+        // return view('distribution.show', ['quartier'=>$quartier->first()]);
+        return redirect(route('distribution.list', ['quartier'=> $quartier->first()]));
     }
     
     public function show(Quartier $quartier)
@@ -79,5 +81,57 @@ class DistributionController extends Controller
             $citoyen->distribue($quartier);
         }
         return redirect()->route('distribution.show', ['quartier' => $quartier->id])->withSuccess('Succès !');
+    }
+
+    public function list(Quartier $quartier)
+    {
+        if (request('prio') == 'prio') {
+            $citoyens = Citoyen::whereHas('foyer.quartier', function ($querry) use($quartier){
+                $querry->where('id', $quartier->id);
+            })->where('distribue',false)->orderBy('prioritaire', 'desc')->simplePaginate('25');
+        }else{
+            $citoyens = Citoyen::whereHas('foyer.quartier', function ($querry) use($quartier){
+                $querry->where('id', $quartier->id);
+            })->where('distribue',false)->simplePaginate('25');
+        }
+        return view('distribution.list', compact(['quartier', 'citoyens']));
+    }
+
+    public function search(Quartier $quartier)
+    {
+        request()->validate([
+            'search'=>'required',
+        ]);
+        $citoyens = Citoyen::whereHas('foyer.quartier', function ($querry) use($quartier)
+        {
+            $querry->where('id', $quartier->id);
+        })
+        ->whereHas('foyer.inscription',function($querry)
+        {
+            $querry->where('numero', 'like', '%'.request('search').'%');
+        })
+        ->orwhere('nom', 'like', '%'.request('search').'%')
+        ->orWhere('prenom', 'like','%'.request('search').'%')
+        ->where('distribue',false)
+        ->paginate('25');
+        return view('distribution.list', compact(['citoyens','quartier']));
+    }
+
+    public function showCitoyen(Quartier $quartier, $inscription)
+    {
+        $inscription = Inscription::where('numero', $inscription)->get()->first();
+        $citoyen = $inscription->citoyens()->first();
+        $membres = $inscription->citoyens();
+        return view('distribution.showCitoyen', compact(['quartier', 'citoyen', 'membres', 'inscription']));
+    }
+
+    public function distribue(Quartier $quartier, $inscription)
+    {
+        $inscription = Inscription::where('numero', $inscription)->get()->first();
+        $membres = $inscription->citoyens();
+        foreach ($membres as $membre) {
+            $membre->distribue2();
+        }
+        return redirect(route('distribution.list', ['quartier'=> $quartier->id]))->withSuccess('Distribution validée !');
     }
 }

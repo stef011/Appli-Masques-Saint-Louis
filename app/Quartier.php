@@ -37,7 +37,7 @@ class Quartier extends Model
     {
         return $this->belongsToMany(User::class);
     }
-    public function foyer()
+    public function foyers()
     {
         return $this->hasMany(Foyer::class);
     }

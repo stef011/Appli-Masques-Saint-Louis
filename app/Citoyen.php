@@ -25,6 +25,13 @@ class Citoyen extends Model
         $this->save();
         return $this;
     }
+    public function distribue2()
+    {
+        $this->distribue = true;
+        $this->foyer->quartier->distribue();
+        $this->save();
+        return $this;
+    }
 
     public function createNotSave($request)
     {

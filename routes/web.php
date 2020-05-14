@@ -33,8 +33,10 @@ Route::group(['prefix'=>'inscription', 'as'=>'inscription.'], function()
     Route::get('/show', 'InscriptionController@showGet')->name('show');
     Route::post('/show', 'InscriptionController@show')->name('show');
     Route::get('/confirmed', 'InscriptionController@confirm')->name('confirm');
+    
     Route::get('/get', 'InscriptionController@get')->name('get');
     Route::post('/get', 'InscriptionController@get')->name('get');
+
     Route::get('/{inscription:numero}/edit', 'InscriptionController@edit')->name('edit');
     Route::get('/{inscription:numero}/confirm', 'InscriptionController@confirmEdit')->name('confirmEdit');
     Route::put('/{inscription:numero}/edit', 'InscriptionController@editPut')->name('edit');
@@ -58,9 +60,16 @@ Route::middleware(['gestion','auth'])->group(function(){
 // Distribution
 Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> ['userQuartier','auth']], function () {
     Route::get('/', 'DistributionController@index')->name('index');
-    Route::get('/{quartier:id}', 'DistributionController@show')->name('show');
+    Route::get('/{quartier:id}', 'DistributionController@list')->name('show');
     Route::post('/{quartier:id}/create', 'DistributionController@create')->name('create');
     Route::post('/{quartier:id}/demande', 'DistributionController@new')->name('demande');
+
+    Route::get('/{quartier:id}/list', 'DistributionController@list')->name('list');
+    Route::post('/{quartier:id}/search', 'DistributionController@search')->name('search');
+    Route::get('/{quartier:id}/search', 'DistributionController@list')->name('search');
+
+    Route::get('/{quartier:id}/{inscription}/show', 'DistributionController@showCitoyen')->name('showCitoyen');
+    Route::get('/{quartier:id}/{inscription}/validate', 'DistributionController@distribue')->name('validate');
 });
 
 // Admin Routes

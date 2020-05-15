@@ -156,7 +156,7 @@ class DistributionController extends Controller
             $citoyen->distribue = true;
             $citoyen->save();
             if ($citoyen->foyer->nb_masques == '') {
-                dd('fait');
+                // dd('fait');
                 $citoyen->distribue2();
             }
         }

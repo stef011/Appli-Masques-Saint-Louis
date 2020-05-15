@@ -19,7 +19,7 @@ Liste des citoyens
                 <button type="submit" class="btn btn-primary btn-shadow">Rechercher</button>
             </div>
             <div class="">
-                <a href="{{ route('distribution.newInscription') }}" class="btn btn-secondary btn-shadow">Inscrire
+                <a href="{{ route('distribution.newInscription') }}" class="btn btn-danger btn-lg btn-shadow">Inscrire
                     une
                     personne</a>
             </div>
@@ -37,6 +37,7 @@ Liste des citoyens
             <th scope="col">Numéro de demande</th>
             <th scope="col">Nombres de personnes du foyer</th>
             <th scope="col">Adresse</th>
+            <th scope="col">Distribué</th>
             <th scope="col"></th>
         </thead>
         <tbody>
@@ -51,6 +52,7 @@ Liste des citoyens
                 <td>{{ $citoyen->inscription()->numero }}</td>
                 <td>{{ $citoyen->foyer->nb_masques }}</td>
                 <td>{{ $citoyen->foyer->numero }} {{ $citoyen->foyer->rue->nom }}</td>
+                <td>{{ $citoyen->distribue== 1 ? '""Oui""' : 'Non'  }}</td>
                 <td>
                     <a href="{{ route('distribution.showCitoyen',['inscription'=>$citoyen->inscription()->numero,'quartier'=>$quartier]) }}"
                         class="btn btn-info btn-shadow">Voir</a>

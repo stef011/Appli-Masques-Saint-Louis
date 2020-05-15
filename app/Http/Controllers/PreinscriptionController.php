@@ -7,6 +7,7 @@ use App\Citoyen;
 use App\Inscription;
 use App\Foyer;
 use App\Rue;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PreinscriptionController extends Controller
@@ -14,7 +15,10 @@ class PreinscriptionController extends Controller
     public function index()
     {
         $quartiers = Quartier::all();
-        return view('preinscription.index', compact('quartiers'));
+        if (Auth::user()->role->role == 'distribution') {
+            $quartier = request()->session()->get('quartierDistribution');
+        }
+        return view('preinscription.index', compact(['quartiers', 'quartier']));
     }
 
      public function show()
@@ -52,15 +56,21 @@ class PreinscriptionController extends Controller
             'membres'=>$membres,
             'foyer'=>$foyer,
         ]);
-        
-        return view('preinscription.show', compact(['citoyen', 'membres']));
+
+       if (Auth::user()->role->role == 'distribution') {
+          $quartier = request()->session()->get('quartierDistribution');
+       }
+        return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
     }
     public function showGet()
     {
         $citoyen = request()->session()->get('citoyen');
         $membres = request()->session()->get('membres');
+        if (Auth::user()->role->role == 'distribution') {
+        $quartier = request()->session()->get('quartierDistribution');
+        }
 
-        return view('preinscription.show', compact(['citoyen', 'membres']));
+        return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
     }
 
 
@@ -97,7 +107,7 @@ class PreinscriptionController extends Controller
 
 
 
-        return redirect(route('preinscription.show'));
+        return redirect(Auth::user()->role->role == 'preinscription' ? route('preinscription.show') : route('distribution.showInscription'));
 
     }
 
@@ -115,11 +125,15 @@ class PreinscriptionController extends Controller
     ]);
 
     $citoyen = request()->session()->get('citoyen');
-
-    return view('preinscription.show', compact(['citoyen', 'membres']));
+    
+    if (Auth::user()->role->role == 'distribution') {
+        $quartier = request()->session()->get('quartierDistribution');
     }
 
-public function confirm()
+    return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
+    }
+
+    public function confirm()
     {
         $membres = request()->session()->get('membres');
         $foyer = request()->session()->get('foyer');
@@ -134,7 +148,6 @@ public function confirm()
             $citoyen->foyer()->associate($foyer);
             $citoyen->save();
         }
-        $chef = request()->session()->get('citoyen');
 
 
         request()->session()->forget(['inscription','citoyens','membres','foyer']);

@@ -30,6 +30,13 @@ class Quartier extends Model
         $this->distribue++;
         $this->save();
     }
+    public function distribueNbr(int $nbr)
+    {
+        $this->stock -= $nbr;
+        $this->distribue += $nbr;
+        $this->save();
+        
+    }
 
     // Relations
 

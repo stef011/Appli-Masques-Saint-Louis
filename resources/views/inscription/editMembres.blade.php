@@ -69,10 +69,18 @@ hidden
 
         <div class="d-flex justify-content-between mt-5">
             <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
+            @auth
+            <a href="{{ route(Auth::user()->role->role == 'distribution' ? 'distribution.confirmEdit' : 'inscription.confirmEdit',['inscription'=>$inscription->numero]) }}"
+                type="button" class="btn btn-success btn-shadow">
+                {{ Auth::user()->role->role == 'distribution' ? 'Valider et Distribuer' : 'Valider et Terminer' }}
+            </a>
+            @endauth
+            @guest
             <a href="{{ route('inscription.confirmEdit',['inscription'=>$inscription->numero]) }}" type="button"
-                class="btn btn-success btn-shadow">Valider
-                et
-                terminer</a>
+                class="btn btn-success btn-shadow">
+                Valider et Terminer
+            </a>
+            @endguest
         </div>
         <p class="float-right">Etape 2/2</p>
     </form>

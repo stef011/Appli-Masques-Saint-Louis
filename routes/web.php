@@ -60,6 +60,14 @@ Route::middleware(['gestion','auth'])->group(function(){
 // Distribution
 Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> ['userQuartier','auth']], function () {
     Route::get('/', 'DistributionController@index')->name('index');
+
+    Route::get('/newInscription', 'PreinscriptionController@index')->name('newInscription');
+    Route::get('/show', 'PreinscriptionController@showGet')->name('showInscription');
+    Route::post('/show', 'PreinscriptionController@show')->name('showInscription');
+    Route::post('/add', 'PreinscriptionController@add')->name('add');
+    Route::get('/{membre}/remove', 'PreinscriptionController@remove')->name('remove');
+    Route::get('/confirmed', 'DistributionController@confirm')->name('confirm');
+    
     Route::get('/{quartier:id}', 'DistributionController@list')->name('show');
     Route::post('/{quartier:id}/create', 'DistributionController@create')->name('create');
     Route::post('/{quartier:id}/demande', 'DistributionController@new')->name('demande');
@@ -67,6 +75,9 @@ Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> 
     Route::get('/{quartier:id}/list', 'DistributionController@list')->name('list');
     Route::post('/{quartier:id}/search', 'DistributionController@search')->name('search');
     Route::get('/{quartier:id}/search', 'DistributionController@list')->name('search');
+
+
+    Route::get('/{inscription:numero}/confirm', 'DistributionController@confirmEdit')->name('confirmEdit');
 
     Route::get('/{quartier:id}/{inscription}/show', 'DistributionController@showCitoyen')->name('showCitoyen');
     Route::get('/{quartier:id}/{inscription}/validate', 'DistributionController@distribue')->name('validate');

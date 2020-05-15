@@ -27,6 +27,7 @@ Liste des préinscriptions
             <th scope="col">Numéro de téléphone</th>
             <th scope="col">Numéro de demande</th>
             <th scope="col">Nombres de personnes du foyer</th>
+            <th scope="col">Adresse</th>
             <th scope="col"></th>
         </thead>
         <tbody>
@@ -40,6 +41,7 @@ Liste des préinscriptions
                 <td>{{ $citoyen->tel }}</td>
                 <td>{{ $citoyen->inscription()->numero }}</td>
                 <td>{{ $citoyen->foyer->nb_masques }}</td>
+                <td>{{ $citoyen->foyer->numero }} {{ $citoyen->foyer->rue->nom }}</td>
                 <td>
                     @if($citoyen->tel != '')
                     <a href="{{ route('preinscription.edit',['inscription'=>$citoyen->inscription()->numero]) }}"

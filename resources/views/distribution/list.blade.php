@@ -1,13 +1,12 @@
 @extends('layouts.layout')
 
 @section('title')
-Entrée du code
+Liste des citoyens
 @endsection
 
 @section('content')
 <div class="mw-10 m-auto">
-    <form action="{{ route('distribution.search', ['quartier'=>$quartier]) }}" method="post"
-        class="d-flex flex-column w-100">
+    <form action="{{ route('distribution.search', ['quartier'=>$quartier]) }}" method="post" class=" w-auto mt-3">
         @csrf
         @if (session('success'))
         <p class="alert alert-success">{{ session('success') }}</p>
@@ -18,6 +17,11 @@ Entrée du code
             </div>
             <div class="form-group col-2">
                 <button type="submit" class="btn btn-primary btn-shadow">Rechercher</button>
+            </div>
+            <div class="">
+                <a href="{{ route('distribution.newInscription') }}" class="btn btn-secondary btn-shadow">Inscrire
+                    une
+                    personne</a>
             </div>
         </div>
     </form>
@@ -32,6 +36,7 @@ Entrée du code
             <th scope="col">Numéro de téléphone</th>
             <th scope="col">Numéro de demande</th>
             <th scope="col">Nombres de personnes du foyer</th>
+            <th scope="col">Adresse</th>
             <th scope="col"></th>
         </thead>
         <tbody>
@@ -45,6 +50,7 @@ Entrée du code
                 <td>{{ $citoyen->tel }}</td>
                 <td>{{ $citoyen->inscription()->numero }}</td>
                 <td>{{ $citoyen->foyer->nb_masques }}</td>
+                <td>{{ $citoyen->foyer->numero }} {{ $citoyen->foyer->rue->nom }}</td>
                 <td>
                     <a href="{{ route('distribution.showCitoyen',['inscription'=>$citoyen->inscription()->numero,'quartier'=>$quartier]) }}"
                         class="btn btn-info btn-shadow">Voir</a>

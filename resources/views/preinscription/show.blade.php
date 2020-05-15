@@ -8,8 +8,9 @@
 @section('content')
 <div class="m5">
     <h2>Ajout des membres du foyer</h2>
-    <form method="post" action="{{ route('preinscription.add') }}" class="m-auto table-responsive"
-        style="max-width: 150rem">
+    <form method="post"
+        action="{{ Auth::user()->role->role == 'preinscription' ? route('preinscription.add') : route('distribution.add') }}"
+        class="m-auto table-responsive" style="max-width: 150rem">
         @csrf
 
         <table class="table table-striped table-bordered m-auto h5 text-center">
@@ -33,8 +34,9 @@
                     </td>
                     <td>
                         @if($key !=0)
-                        <a href="{{ route('preinscription.remove', ['membre'=>$key]) }}" type='button'
-                            class="btn btn-danger btn-shadow"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <a href="{{ route(Auth::user()->role->role == 'preinscription' ? 'preinscription.remove' : 'distribution.remove', ['membre'=>$key]) }}"
+                            type='button' class="btn btn-danger btn-shadow"><i class="fa fa-trash"
+                                aria-hidden="true"></i></a>
                         @endif
                     </td>
                 </tr>
@@ -63,9 +65,10 @@
 
         <div class="d-flex justify-content-between mt-5">
             <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
-            <a href="{{ route('preinscription.confirm') }}" type="button" class="btn btn-success btn-shadow">Valider
-                et
-                terminer</a>
+            <a href="{{ Auth::user()->role->role == 'preinscription' ? route('preinscription.confirm') : route('distribution.confirm') }}"
+                type="button" class="btn btn-success btn-shadow">
+                {{ Auth::user()->role->role == 'distribution' ? 'Valider et Distribuer' : 'Valider et Terminer' }}
+            </a>
         </div>
         <p class="float-right">Etape 2/2</p>
     </form>

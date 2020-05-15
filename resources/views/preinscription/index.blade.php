@@ -17,8 +17,9 @@ Pré-Inscription
     <p class="alert alert-success w-50 m-auto"> {{ session('success') }} </p>
     @endif
     <div class="mt-5">
-        <form action="{{ route('preinscription.show') }}" method="POST" class="st-blue mw-10 m-auto d-flex flex-column"
-            style="max-width: 60rem !important;">
+        <form
+            action="{{ Auth::user()->role->role == 'preinscription' ? route('preinscription.show') : route('distribution.showInscription') }}"
+            method="POST" class="st-blue mw-10 m-auto d-flex flex-column" style="max-width: 60rem !important;">
             <h2 class="h1 mb-3">Coordonnées du demandeur</h2>
             @if ($errors->any())
             @if ($errors->has('email'))
@@ -91,9 +92,10 @@ Pré-Inscription
                 <div class="form-group col-md-5">
                     <label for="Quartier">Point de retrait</label>
                     <select name="quartier" id="quartier" class="form-control @error('quartier') is-invalid @enderror"
-                        required>
-                        @foreach ($quartiers as $quartier)
-                        <option value="{{ $quartier->id }}">{{ $quartier->nom }}</option>
+                        @if(Auth::user()->role->role == 'distribution') readOnly @endif required>
+                        @foreach ($quartiers as $quart)
+                        <option value="{{ $quart->id }}" @if(isset($quartier) && $quartier==$quart) selected @endif>
+                            {{ $quart->nom }}</option>
                         @endforeach
                     </select>
                     @error('quartier')
@@ -133,8 +135,10 @@ Pré-Inscription
 
             <div class="form-row mt-5 justify-content-between">
                 <button type="reset" class="btn btn-shadow btn-danger">Réinitialiser</button>
+                @if(Auth::user()->role->role == 'preinscription')
                 <a href="{{ route('preinscription.list') }}" class="btn btn-secondary btn-shadow" role="button">Liste
                     des inscrits</a>
+                @endif
                 <button type="submit" class="btn btn-shadow btn-success">Valider</button>
             </div>
 

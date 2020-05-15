@@ -25,6 +25,7 @@ class DistributionController extends Controller
         if($quartier->count() > 1){
             return view('distribution.index', compact('quartier'));
         }
+        request()->session()->put(['quartierDistribution'=>$quartier->first()]);
         // return view('distribution.show', ['quartier'=>$quartier->first()]);
         return redirect(route('distribution.list', ['quartier'=> $quartier->first()]));
     }
@@ -32,6 +33,9 @@ class DistributionController extends Controller
     public function show(Quartier $quartier)
     {
         $this->authorize('update', $quartier);
+
+        request()->session()->put(['quartierDistribution'=>$quartier]);
+
 
         return view('distribution.show', compact('quartier'));
     }
@@ -60,6 +64,9 @@ class DistributionController extends Controller
                 return view('distribution.demande');
             }
         }
+
+        request()->session()->put(['quartierDistribution'=>$quartier]);
+
         return view('distribution.demande', compact('citoyen', 'membres', 'quartier'));
         
     }
@@ -80,6 +87,9 @@ class DistributionController extends Controller
         foreach ($citoyens as $citoyen) {
             $citoyen->distribue($quartier);
         }
+
+        request()->session()->put(['quartierDistribution'=>$quartier]);
+
         return redirect()->route('distribution.show', ['quartier' => $quartier->id])->withSuccess('Succès !');
     }
 
@@ -94,6 +104,7 @@ class DistributionController extends Controller
                 $querry->where('id', $quartier->id);
             })->where('distribue',false)->simplePaginate('25');
         }
+        request()->session()->put(['quartierDistribution'=>$quartier]);
         return view('distribution.list', compact(['quartier', 'citoyens']));
     }
 
@@ -114,14 +125,21 @@ class DistributionController extends Controller
         ->orWhere('prenom', 'like','%'.request('search').'%')
         ->where('distribue',false)
         ->paginate('25');
+        request()->session()->put(['quartierDistribution'=>$quartier]);
         return view('distribution.list', compact(['citoyens','quartier']));
     }
 
     public function showCitoyen(Quartier $quartier, $inscription)
     {
         $inscription = Inscription::where('numero', $inscription)->get()->first();
-        $citoyen = $inscription->citoyens()->first();
+        $citoyen = $inscription->citoyens()->filter(function ($item)
+        {
+            return $item->tel != '' || $item->email!='';
+        })->first();
         $membres = $inscription->citoyens();
+
+        request()->session()->put(['quartierDistribution'=>$quartier]);
+
         return view('distribution.showCitoyen', compact(['quartier', 'citoyen', 'membres', 'inscription']));
     }
 
@@ -129,9 +147,94 @@ class DistributionController extends Controller
     {
         $inscription = Inscription::where('numero', $inscription)->get()->first();
         $membres = $inscription->citoyens();
-        foreach ($membres as $membre) {
-            $membre->distribue2();
+
+        // foreach ($membres as $membre) {
+        //     $membre->distribue2();
+        // }
+
+        foreach($membres as $citoyen){
+            $citoyen->distribue = true;
+            $citoyen->save();
+            if ($citoyen->foyer->nb_masques == '') {
+                dd('fait');
+                $citoyen->distribue2();
+            }
         }
+
+        if ($inscription->foyer->nb_masques != '') {
+            $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
+        }
+
+        request()->session()->put(['quartierDistribution'=>$quartier]);
+
         return redirect(route('distribution.list', ['quartier'=> $quartier->id]))->withSuccess('Distribution validée !');
     }
+
+
+
+    public function confirmEdit(Inscription $inscription)
+    {
+        if(null !== request()->session()->get('citoyen')){
+            $membres = request()->session()->get('membres');
+            $foyer = request()->session()->get('foyer');
+
+            $foyer->save();
+
+            // foreach($membres as $citoyen){
+            //     $citoyen->foyer()->associate($foyer);
+            //     $citoyen->save();
+            //     $citoyen->distribue2();
+            // }
+            foreach($membres as $citoyen){
+                $citoyen->foyer()->associate($foyer);
+                $citoyen->distribue = true;
+                $citoyen->prioritaire = request()->session()->get('citoyen')->prioritaire;
+                $citoyen->save();
+                if ($citoyen->foyer->nb_masques == '') {
+                    $citoyen->distribue2();
+                }
+            }
+
+            if ($inscription->foyer->nb_masques != '') {
+                $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
+            }
+        }
+
+        request()->session()->forget(['citoyen','membres','foyer']);
+
+        return redirect(route('distribution.index'));
+
+    }
+
+
+
+        public function confirm()
+        {
+            $membres = request()->session()->get('membres');
+            $foyer = request()->session()->get('foyer');
+            $inscription = request()->session()->get('inscription');
+
+            $inscription->save();
+
+            $foyer->inscription()->associate($inscription);
+            $foyer->save();
+
+            foreach($membres as $citoyen){
+                $citoyen->foyer()->associate($foyer);
+                $citoyen->distribue = true;
+                $citoyen->save();
+                if ($citoyen->foyer->nb_masques == '') {
+                    $citoyen->distribue2();
+                }
+            }
+
+            if ($inscription->foyer->nb_masques != '') {
+                $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
+            }
+
+            $quartier = request()->session()->get('quartierDistribution');
+
+            request()->session()->forget(['inscription','citoyens','membres','foyer']);
+            return redirect(route('distribution.list', compact('quartier')))->withSuccess('Inscription validée');
+        }
 }

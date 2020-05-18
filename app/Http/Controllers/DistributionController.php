@@ -131,7 +131,14 @@ class DistributionController extends Controller
 
     public function showCitoyen(Quartier $quartier, $inscription)
     {
-        $inscription = Inscription::where('numero', $inscription)->get()->first();
+        $inscriptions = Inscription::where('numero', $inscription)->get();
+
+        foreach ($inscriptions as $insc ) {
+            if ($insc->citoyens() && $insc->citoyens()->count() > 0) {
+                $inscription = $insc;
+            }
+        }
+
         $citoyen = $inscription->citoyens()->filter(function ($item)
         {
             return $item->tel != '' || $item->email!='';
@@ -145,7 +152,13 @@ class DistributionController extends Controller
 
     public function distribue(Quartier $quartier, $inscription)
     {
-        $inscription = Inscription::where('numero', $inscription)->get()->first();
+        $inscriptions = Inscription::where('numero', $inscription)->get();
+        
+        foreach ($inscriptions as $insc ) {
+            if ($insc->citoyens() && $insc->citoyens()->count() > 0) {
+                $inscription = $insc;
+            }
+        }
         $membres = $inscription->citoyens();
 
         // foreach ($membres as $membre) {

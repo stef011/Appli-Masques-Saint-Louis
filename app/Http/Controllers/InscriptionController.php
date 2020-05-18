@@ -172,8 +172,17 @@ class InscriptionController extends Controller
         return view('inscription.edit', compact('inscription', 'quartiers'));
     }
 
-    public function editPut(Inscription $inscription)
+    public function editPut($inscription)
     {
+        
+                $inscriptions = Inscription::where('numero', $inscription)->get();
+        
+                foreach ($inscriptions as $insc ) {
+                    if ($insc->citoyens() && $insc->citoyens()->count() > 0) {
+                        // dd($insc);
+                        $inscription = $insc;
+                    }
+                }
         request()->validate([
             'nom'=>'required',
             'date_de_naissance'=>'required|date',

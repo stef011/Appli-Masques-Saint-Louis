@@ -29,13 +29,12 @@ class Inscription extends Model
                     $citoyen->delete();
                 }
             }
-
-        });
-        static::deleted(function ($inscription)
-        {
             if ($inscription->foyer) {
                 $inscription->foyer->delete();
             }
+        });
+        static::deleted(function ($inscription)
+        {
         });
     }
 }

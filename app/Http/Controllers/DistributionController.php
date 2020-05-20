@@ -98,11 +98,11 @@ class DistributionController extends Controller
         if (request('prio') == 'prio') {
             $citoyens = Citoyen::whereHas('foyer.quartier', function ($querry) use($quartier){
                 $querry->where('id', $quartier->id);
-            })->where('distribue',false)->orderBy('prioritaire', 'desc')->simplePaginate('25');
+            })->orderBy('prioritaire', 'desc')->simplePaginate('25');
         }else{
             $citoyens = Citoyen::whereHas('foyer.quartier', function ($querry) use($quartier){
                 $querry->where('id', $quartier->id);
-            })->where('distribue',false)->simplePaginate('25');
+            })->simplePaginate('25');
         }
         request()->session()->put(['quartierDistribution'=>$quartier]);
         return view('distribution.list', compact(['quartier', 'citoyens']));

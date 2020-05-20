@@ -42,7 +42,7 @@ Liste des citoyens
         </thead>
         <tbody>
             @foreach ($citoyens as $key=>$citoyen)
-            <tr>
+            <tr class="{{ $citoyen->distribue == 1 ? 'table-success' : '' }}">
                 <th scope="row">{{ $key+1 }}</th>
                 <td>{{ $citoyen->nom }}</td>
                 <td>{{ $citoyen->prenom }}</td>
@@ -52,7 +52,7 @@ Liste des citoyens
                 <td>{{ $citoyen->inscription()->numero }}</td>
                 <td>{{ $citoyen->foyer->nb_masques }}</td>
                 <td>{{ $citoyen->foyer->numero }} {{ $citoyen->foyer->rue->nom }}</td>
-                <td>{{ $citoyen->distribue== 1 ? '""Oui""' : 'Non'  }}</td>
+                <td>{{ $citoyen->distribue== 1 ? 'Oui' : 'Non'  }}</td>
                 <td>
                     <a href="{{ route('distribution.showCitoyen',['inscription'=>$citoyen->inscription()->numero,'quartier'=>$quartier]) }}"
                         class="btn btn-info btn-shadow">Voir</a>

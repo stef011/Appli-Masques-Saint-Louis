@@ -81,6 +81,12 @@ Route::group(['prefix' => 'distribution', 'as'=>'distribution.', 'middleware'=> 
 
     Route::get('/{quartier:id}/{inscription}/show', 'DistributionController@showCitoyen')->name('showCitoyen');
     Route::get('/{quartier:id}/{inscription}/validate', 'DistributionController@distribue')->name('validate');
+
+    // Edit Inscription with phone number
+    Route::put('/{inscription:numero}/edit', 'PreinscriptionController@editPut')->name('edit');
+    Route::put('/{inscription:numero}/edit/membre', 'PreinscriptionController@editMembre')->name('editMembres');
+    Route::get('/{inscription:numero}/{membre}/remove','PreinscriptionController@editMembreRemove')->name('removeMembre');
+    
 });
 
 // Admin Routes
@@ -112,6 +118,14 @@ Route::group(['prefix'=>'preinscription', 'as'=>'preinscription.', 'middleware'=
     Route::put('/{inscription:numero}/edit', 'PreinscriptionController@editPut')->name('edit');
     Route::put('/{inscription:numero}/edit/membre', 'PreinscriptionController@editMembre')->name('editMembres');
     Route::get('/{inscription:numero}/{membre}/remove', 'PreinscriptionController@editMembreRemove')->name('removeMembre');
+
+    Route::get('/{foyer}/delete', 'PreinscriptionController@delete')->name('delete');
+});
+
+
+// Listes
+Route::group(['prefix'=>'list', 'as'=>'list', 'middleware'=>'auth'], function(){
+    
 });
 
 

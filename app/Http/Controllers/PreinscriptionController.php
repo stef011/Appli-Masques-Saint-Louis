@@ -17,8 +17,9 @@ class PreinscriptionController extends Controller
         $quartiers = Quartier::all();
         if (Auth::user()->role->role == 'distribution') {
             $quartier = request()->session()->get('quartierDistribution');
+            return view('preinscription.index', compact(['quartiers', 'quartier']));
         }
-        return view('preinscription.index', compact(['quartiers', 'quartier']));
+        return view('preinscription.index', compact(['quartiers']));
     }
 
      public function show()
@@ -30,7 +31,7 @@ class PreinscriptionController extends Controller
             'prenom'=>'required',
             'numero'=>'required|integer',
             'rueid'=>'required|integer',
-            'tel'=>'required|numeric',
+            'tel'=>'numeric',
             'quartier'=>'required|integer',
             'prioritaire'=>'required|boolean',
             'nb_masques'=>'nullable|integer',
@@ -59,8 +60,9 @@ class PreinscriptionController extends Controller
 
        if (Auth::user()->role->role == 'distribution') {
           $quartier = request()->session()->get('quartierDistribution');
+          return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
        }
-        return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
+        return view('preinscription.show', compact(['citoyen', 'membres']));
     }
     public function showGet()
     {
@@ -68,9 +70,10 @@ class PreinscriptionController extends Controller
         $membres = request()->session()->get('membres');
         if (Auth::user()->role->role == 'distribution') {
         $quartier = request()->session()->get('quartierDistribution');
+        return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
         }
 
-        return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
+        return view('preinscription.show', compact(['citoyen', 'membres']));
     }
 
 
@@ -101,13 +104,23 @@ class PreinscriptionController extends Controller
 
         $membres->push($membre);
 
+        $oldMembres = $membres;
+
+        $membres = $membres->unique(function ($item)
+        {
+            return $item->nom.$item->prenom.$item->date_de_naissance;
+        });
+
+        if ($oldMembres !== $membres) {
+            $error = 'Ce membre existe déjà !';
+        }
+
         request()->session()->put([
             'membres'=>$membres,
         ]);
 
 
-
-        return redirect(Auth::user()->role->role == 'preinscription' ? route('preinscription.show') : route('distribution.showInscription'));
+        return redirect(Auth::user()->role->role == 'preinscription' ? route('preinscription.show') : route('distribution.showInscription'))->withSuccess($error);
 
     }
 
@@ -128,9 +141,10 @@ class PreinscriptionController extends Controller
     
     if (Auth::user()->role->role == 'distribution') {
         $quartier = request()->session()->get('quartierDistribution');
+        return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
     }
 
-    return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
+    return view('preinscription.show', compact(['citoyen', 'membres']));
     }
 
     public function confirm()
@@ -234,6 +248,11 @@ class PreinscriptionController extends Controller
         ]);
         request()->session()->put([]);
         
+        if (Auth::user()->role->role == 'distribution') {
+          $quartier = request()->session()->get('quartierDistribution');
+          return view('preinscription.editMembres', compact(['inscription', 'membres', 'citoyen', 'quartier']));
+        }
+        
         return view('preinscription.editMembres', compact(['inscription', 'membres', 'citoyen']));
         
     }
@@ -265,10 +284,26 @@ class PreinscriptionController extends Controller
 
         $membres->push($membre);
 
+        $oldMembres = $membres;
+
+        $membres = $membres->unique(function ($item)
+        {
+            return $item->nom.$item->prenom.$item->date_de_naissance;
+        });
+
+        if ($oldMembres !== $membres) {
+            $error = 'Ce membre existe déjà !';
+        }
+
         request()->session()->put([
             'membres'=>$membres,
         ]);
 
+
+        if (Auth::user()->role->role == 'distribution') {
+          $quartier = request()->session()->get('quartierDistribution');
+          return view('preinscription.editMembres', compact(['inscription', 'membres', 'citoyen', 'quartier']));
+        }
 
 
         return view('preinscription.editMembres', compact(['inscription', 'membres', 'citoyen']));
@@ -289,6 +324,11 @@ class PreinscriptionController extends Controller
         ]);
 
         $citoyen = request()->session()->get('citoyen');
+
+        if (Auth::user()->role->role == 'distribution') {
+          $quartier = request()->session()->get('quartierDistribution');
+          return view('preinscription.editMembres', compact(['inscription', 'membres', 'citoyen', 'quartier']));
+        }
 
         return view('preinscription.editMembres', compact(['inscription', 'membres', 'citoyen']));
     }
@@ -335,5 +375,11 @@ class PreinscriptionController extends Controller
         request()->session()->forget(['inscription','citoyens','membres','foyer']);
         return redirect(route('preinscription.index'))->withSuccess('Modification(s) validée(s)');
 
+    }
+
+    public function delete(Foyer $foyer)
+    {
+        $foyer->inscription->delete();
+        return redirect(route('preinscription.index'))->withSuccess('Foyer et Inscription supprimé !');
     }
 }

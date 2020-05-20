@@ -95,13 +95,25 @@ class InscriptionController extends Controller
 
         $membres->push($membre);
 
+        $oldMembres = $membres;
+
+        $membres = $membres->unique(function ($item)
+        {
+            return $item->nom.$item->prenom.$item->date_de_naissance;
+        });
+
+        if ($oldMembres !== $membres) {
+            $error = 'Ce membre existe déjà !';
+        }
+
+
         request()->session()->put([
             'membres'=>$membres,
         ]);
 
 
 
-        return redirect(route('inscription.show'));
+        return redirect(route('inscription.show'))->withsuccess($error);
 
     }
 
@@ -253,13 +265,24 @@ class InscriptionController extends Controller
 
         $membres->push($membre);
 
+        $oldMembres = $membres;
+
+        $membres = $membres->unique(function ($item)
+        {
+            return $item->nom.$item->prenom.$item->date_de_naissance;
+        });
+
+        if ($oldMembres !== $membres) {
+            $error = 'Ce membre existe déjà !';
+        }
+
         request()->session()->put([
             'membres'=>$membres,
         ]);
 
 
 
-        return view('inscription.editMembres', compact(['inscription', 'membres', 'citoyen']));
+        return view('inscription.editMembres', compact(['inscription', 'membres', 'citoyen']))->withSuccess($error);
 
     }
 

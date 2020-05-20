@@ -12,7 +12,8 @@ hidden
 @section('content')
 <div class="m5">
     <h2>Ajout des membres du foyer</h2>
-    <form method="post" action="{{ route('preinscription.editMembres',['inscription'=>$inscription->numero]) }}"
+    <form method="post"
+        action="{{ Auth::user()->role->role == 'distribution' ? route('distribution.editMembres',['inscription'=>$inscription->numero]) : route('preinscription.editMembres',['inscription'=>$inscription->numero]) }}"
         class="m-auto table-responsive" style="max-width: 150rem">
         @csrf
         @method('PUT')
@@ -38,7 +39,7 @@ hidden
                     </td>
                     <td>
                         @if($key !=0)
-                        <a href="{{ route('preinscription.removeMembre', ['inscription'=>$inscription->numero,'membre'=>$key]) }}"
+                        <a href="{{ Auth::user()->role->role == 'distribution' ? route('distribution.removeMembre', ['inscription'=>$inscription->numero,'membre'=>$key]) : route('preinscription.removeMembre', ['inscription'=>$inscription->numero,'membre'=>$key]) }}"
                             type='button' class="btn btn-danger btn-shadow"><i class="fa fa-trash"
                                 aria-hidden="true"></i></a>
                         @endif
@@ -69,10 +70,14 @@ hidden
 
         <div class="d-flex justify-content-between mt-5">
             <a href="{{ URL::previous() }}" class="btn btn-danger">Annuler</a>
-            <a href="{{ route('preinscription.confirmEdit',['inscription'=>$inscription->numero]) }}" type="button"
-                class="btn btn-success btn-shadow">Valider
-                et
-                terminer</a>
+            <a href="{{ Auth::user()->role->role == 'distribution' ? route('distribution.confirmEdit',['inscription'=>$inscription->numero]) : route('preinscription.confirmEdit',['inscription'=>$inscription->numero]) }}"
+                type="button" class="btn btn-success btn-shadow">
+                @if(Auth::user()->role->role == 'distribution')
+                Valider et distributer
+                @else
+                Valider et terminer
+                @endif
+            </a>
         </div>
         <p class="float-right">Etape 2/2</p>
     </form>

@@ -81,6 +81,7 @@ Pré-Inscription
                 </div>
             </div>
             <div class="form-row mt-auto justify-content-between">
+                @if (Auth::user()->role->role != 'distribution')
                 <div class="form-group col-md-5">
                     <label for="mail">Téléphone</label>
                     <input type="tel" name="tel" id="tel" class="form-control @error('tel') is-invalid @enderror"
@@ -89,6 +90,7 @@ Pré-Inscription
                     <p class="invalid-feedback">{{ $message }}</p>
                     @enderror
                 </div>
+                @endif
                 <div class="form-group col-md-5">
                     <label for="Quartier">Point de retrait</label>
                     <select name="quartier" id="quartier" class="form-control @error('quartier') is-invalid @enderror"
@@ -126,12 +128,14 @@ Pré-Inscription
                 </div>
             </div>
 
+            @if (Auth::user()->role->role != 'distribution')
             <div class="form-row mt-auto justify-content-between">
                 <div class="col-md-5">
                     <label for="nb_masques">Nombre de masques (inscription papier)</label>
                     <input type="number" name="nb_masques" id="nb_masques" class="form-control">
                 </div>
             </div>
+            @endif
 
             <div class="form-row mt-5 justify-content-between">
                 <button type="reset" class="btn btn-shadow btn-danger">Réinitialiser</button>

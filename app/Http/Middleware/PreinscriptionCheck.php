@@ -17,7 +17,7 @@ class PreinscriptionCheck
     public function handle($request, Closure $next)
     {
         if (Auth::user()->role->role != 'preinscription') {
-        return redirect(route('home'));
+        return redirect(route('accueil'));
         }
         return $next($request);
     }

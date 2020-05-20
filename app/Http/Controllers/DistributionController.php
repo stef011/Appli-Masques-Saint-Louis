@@ -215,7 +215,9 @@ class DistributionController extends Controller
 
         request()->session()->forget(['citoyen','membres','foyer']);
 
-        return redirect(route('distribution.index'));
+        $quartier = request()->session()->get('quartierDistribution');
+
+        return redirect(route('distribution.show', ['quartier' => $quartier]))->withSuccess('Inscription modifiée et masques distribués !');
 
     }
 

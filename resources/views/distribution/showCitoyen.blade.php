@@ -54,6 +54,26 @@
         </form>
         {{-- <a href="{{ route('inscription.edit', ['inscription'=>$inscription->numero]) }}"
         class="btn btn-warning btn-shadow">Modifier la Demande</a> --}}
+        @else
+
+        <form action="{{ route('distribution.edit', ['inscription'=>$citoyen->inscription()->numero]) }}" method="post"
+            class="mt-0">
+            @csrf
+            @method('PUT')
+
+            <input type="hidden" value="{{ $citoyen->nom }}" name="nom">
+            <input type="hidden" value="{{ $citoyen->date_de_naissance }}" name="date_de_naissance">
+            <input type="hidden" value="{{ $citoyen->prenom }}" name="prenom">
+            <input type="hidden" value="{{ $citoyen->foyer->numero }}" name="numero">
+            <input type="hidden" value="{{ $citoyen->foyer->rue->id }}" name="rueid">
+            <input type="hidden" value="{{ $citoyen->tel }}" name="tel">
+            <input type="hidden" value="{{ $citoyen->foyer->quartier_id }}" name="quartier">
+            <input type="hidden" value="{{ $citoyen->prioritaire }}" name="prioritaire">
+
+            <button type="submit" class="btn btn-warning btn-shadow">Modifier</button>
+
+        </form>
+
         @endif
         <a href="{{ route('distribution.validate', ['quartier'=>$quartier->id, 'inscription' => $inscription->numero]) }}"
             class="btn btn-success btn-shadow">Valider

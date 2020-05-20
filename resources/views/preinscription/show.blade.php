@@ -13,6 +13,10 @@
         class="m-auto table-responsive" style="max-width: 150rem">
         @csrf
 
+        @if (session('success'))
+        <p class="alert-danger alert">{{ session('success') }}</p>
+        @endif
+
         <table class="table table-striped table-bordered m-auto h5 text-center">
             <thead>
                 <tr>

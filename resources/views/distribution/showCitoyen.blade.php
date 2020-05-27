@@ -75,9 +75,11 @@
         </form>
 
         @endif
+        @if(!$citoyen->distrib2)
         <a href="{{ route('distribution.validate', ['quartier'=>$quartier->id, 'inscription' => $inscription->numero]) }}"
             class="btn btn-success btn-shadow">Valider
-            la distribution</a>
+            la {{ $citoyen->distribue ? 'seconde' : '' }} distribution</a>
+        @endif
     </div>
 </div>
 

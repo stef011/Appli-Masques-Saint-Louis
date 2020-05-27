@@ -6,6 +6,7 @@ use App\Citoyen;
 use App\Inscription;
 use App\Quartier;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Cache\RetrievesMultipleKeys;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -165,14 +166,33 @@ class DistributionController extends Controller
         //     $membre->distribue2();
         // }
 
-        foreach($membres as $citoyen){
-            $citoyen->distribue = true;
-            $citoyen->save();
-            if ($citoyen->foyer->nb_masques == '') {
-                // dd('fait');
-                $citoyen->distribue2();
+            // foreach($membres as $citoyen){
+            //     $citoyen->distribue = true;
+            //     $citoyen->save();
+            //     if ($citoyen->foyer->nb_masques == '') {
+            //         // dd('fait');
+            //         $citoyen->distribue2();
+            //     }
+            // }
+
+            foreach($membres as $citoyen){
+                if(!$citoyen->distribue){
+                    $citoyen->distribue = true;
+                    $citoyen->save();
+                    if ($citoyen->foyer->nb_masques == '') {
+                        // dd('fait');
+                        $citoyen->distribue2();
+                    }
+                }else{
+                    $citoyen->timestamps = false;
+                    $citoyen->distrib2 = Carbon::now()->toDateTimeString();
+                    $citoyen->save();
+                    if ($citoyen->foyer->nb_masques == '') {
+                        // dd('fait');
+                        $citoyen->distribue2();
+                    }
+                }
             }
-        }
 
         if ($inscription->foyer->nb_masques != '') {
             $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);

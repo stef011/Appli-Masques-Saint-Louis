@@ -27,6 +27,9 @@ class Citoyen extends Model
     }
     public function distribue2()
     {
+        if($this->distribue){
+            $this->timestamps = false;
+        }
         $this->distribue = true;
         $this->foyer->quartier->distribue();
         $this->save();

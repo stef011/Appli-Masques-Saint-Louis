@@ -36,7 +36,7 @@ Liste des préinscriptions
                 <th scope="row">{{ $key+1 }}</th>
                 <td>{{ $citoyen->nom }}</td>
                 <td>{{ $citoyen->prenom }}</td>
-                <td>{{ $citoyen->date_de_naissance }}</td>
+                <td>{{ date('d-m-Y', strtotime($citoyen->date_de_naissance)) }}</td>
                 <td>{{ $citoyen->prioritaire == 1 ? 'Oui' : 'Non' }}</td>
                 <td>{{ $citoyen->tel }}</td>
                 <td>{{ $citoyen->inscription()->numero }}</td>

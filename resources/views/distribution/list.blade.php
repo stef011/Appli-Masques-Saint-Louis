@@ -38,21 +38,29 @@ Liste des citoyens
             <th scope="col">Nombres de personnes du foyer</th>
             <th scope="col">Adresse</th>
             <th scope="col">Distribué</th>
+            <th scope="col">Distribué le</th>
+            <th scope="col">Seconde distribution le</th>
             <th scope="col"></th>
         </thead>
         <tbody>
             @foreach ($citoyens as $key=>$citoyen)
-            <tr class="{{ $citoyen->distribue == 1 ? 'table-success' : '' }}">
+            <tr
+                class="{{ $citoyen->distribue == 1 && $citoyen->distrib2 != null ? 'table-success' : ( $citoyen->distribue == 1 ? 'table-warning' : '') }}">
                 <th scope="row">{{ $key+1 }}</th>
                 <td>{{ $citoyen->nom }}</td>
                 <td>{{ $citoyen->prenom }}</td>
-                <td>{{ $citoyen->date_de_naissance }}</td>
+                <td>{{ date('d-m-Y', strtotime($citoyen->date_de_naissance)) }}</td>
                 <td>{{ $citoyen->prioritaire == 1 ? 'Oui' : 'Non' }}</td>
                 <td>{{ $citoyen->tel }}</td>
                 <td>{{ $citoyen->inscription()->numero }}</td>
                 <td>{{ $citoyen->foyer->nb_masques }}</td>
                 <td>{{ $citoyen->foyer->numero }} {{ $citoyen->foyer->rue->nom }}</td>
                 <td>{{ $citoyen->distribue== 1 ? 'Oui' : 'Non'  }}</td>
+                <td>{!! $citoyen->distribue == 1 ? date("d-m-Y
+                    <br /> H:i", strtotime($citoyen->updated_at)) : '<i class="fas fa-slash"></i>' !!}
+                </td>
+                <td>{!! $citoyen->distrib2 ? date("d-m-Y
+                    <br /> H:i", strtotime($citoyen->distrib2)) : '<i class="fas fa-slash"></i>' !!}</td>
                 <td>
                     <a href="{{ route('distribution.showCitoyen',['inscription'=>$citoyen->inscription()->numero,'quartier'=>$quartier]) }}"
                         class="btn btn-info btn-shadow">Voir</a>

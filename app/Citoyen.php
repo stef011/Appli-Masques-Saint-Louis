@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Citoyen extends Model
 {
+    public $timestamps = false;
     protected $fillable=[
         'nom',
         'prenom',
@@ -27,8 +28,8 @@ class Citoyen extends Model
     }
     public function distribue2()
     {
-        if($this->distribue){
-            $this->timestamps = false;
+        if(!$this->distribue){
+            $this->timestamps = true;
         }
         $this->distribue = true;
         $this->foyer->quartier->distribue();

@@ -128,14 +128,14 @@ Pré-Inscription
                 </div>
             </div>
 
-            @if (Auth::user()->role->role != 'distribution')
+            {{-- @if (Auth::user()->role->role != 'distribution') --}}
             <div class="form-row mt-auto justify-content-between">
                 <div class="col-md-5">
-                    <label for="nb_masques">Nombre de masques (inscription papier)</label>
+                    <label for="nb_masques">Nombre de masques (facultatif)</label>
                     <input type="number" name="nb_masques" id="nb_masques" class="form-control">
                 </div>
             </div>
-            @endif
+            {{-- @endif --}}
 
             <div class="form-row mt-5 justify-content-between">
                 <button type="reset" class="btn btn-shadow btn-danger">Réinitialiser</button>

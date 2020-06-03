@@ -111,9 +111,9 @@ class PreinscriptionController extends Controller
             return $item->nom.$item->prenom.$item->date_de_naissance;
         });
 
-        if ($oldMembres !== $membres) {
+        if ($oldMembres != $membres) {
             $error = 'Ce membre existe déjà !';
-        }
+        }else{$error = '';}
 
         request()->session()->put([
             'membres'=>$membres,
@@ -159,6 +159,7 @@ class PreinscriptionController extends Controller
         $foyer->save();
 
         foreach($membres as $citoyen){
+            $citoyen->timestamps = true;
             $citoyen->foyer()->associate($foyer);
             $citoyen->save();
         }

@@ -53,7 +53,8 @@ Liste des citoyens
                 <td>{{ $citoyen->prioritaire == 1 ? 'Oui' : 'Non' }}</td>
                 <td>{{ $citoyen->tel }}</td>
                 <td>{{ $citoyen->inscription()->numero }}</td>
-                <td>{{ $citoyen->foyer->nb_masques }}</td>
+                <td>{{ $citoyen->foyer->nb_masques  > $citoyen->foyer->citoyens->count() ? $citoyen->foyer->nb_masques : $citoyen->foyer->citoyens->count() }}
+                </td>
                 <td>{{ $citoyen->foyer->numero }} {{ $citoyen->foyer->rue->nom }}</td>
                 <td>{{ $citoyen->distribue== 1 ? 'Oui' : 'Non'  }}</td>
                 <td>{!! $citoyen->distribue == 1 ? date("d-m-Y

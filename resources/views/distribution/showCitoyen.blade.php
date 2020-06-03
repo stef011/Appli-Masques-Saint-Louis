@@ -30,7 +30,7 @@
     </table>
     <div>
         <p class="h3 float-right mt-1">Nombre de masques à distribuer :
-            {{ $citoyen->foyer->nb_masques != '' ? $citoyen->foyer->nb_masques : $membres->count() }}</p>
+            {{ $citoyen->foyer->nb_masques > $membres->count() ? $citoyen->foyer->nb_masques : $membres->count() }}</p>
     </div>
     <div class="d-flex justify-content-between mt-5">
         <a href="{{ route('distribution.list', ['quartier'=>$quartier]) }}" class="btn btn-danger btn-sha">Annuler</a>

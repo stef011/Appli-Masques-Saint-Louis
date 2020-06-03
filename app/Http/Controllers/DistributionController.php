@@ -177,24 +177,24 @@ class DistributionController extends Controller
 
             foreach($membres as $citoyen){
                 if(!$citoyen->distribue){
+                    $citoyen->timestamps = true;
                     $citoyen->distribue = true;
                     $citoyen->save();
-                    if ($citoyen->foyer->nb_masques == '') {
+                    if ($citoyen->foyer->nb_masques == '' || $membres->count() > $citoyen->foyer->nb_masques) {
                         // dd('fait');
                         $citoyen->distribue2();
                     }
                 }else{
-                    $citoyen->timestamps = false;
                     $citoyen->distrib2 = Carbon::now()->toDateTimeString();
                     $citoyen->save();
-                    if ($citoyen->foyer->nb_masques == '') {
+                    if ($citoyen->foyer->nb_masques == '' || $membres->count() > $citoyen->foyer->nb_masques) {
                         // dd('fait');
                         $citoyen->distribue2();
                     }
                 }
             }
 
-        if ($inscription->foyer->nb_masques != '') {
+        if ($inscription->foyer->nb_masques != '' && $membres->count() < $citoyen->foyer->nb_masques) {
             $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
         }
 
@@ -223,12 +223,12 @@ class DistributionController extends Controller
                 $citoyen->distribue = true;
                 $citoyen->prioritaire = request()->session()->get('citoyen')->prioritaire;
                 $citoyen->save();
-                if ($citoyen->foyer->nb_masques == '') {
+                if ($citoyen->foyer->nb_masques == '' || $membres->count() > $citoyen->foyer->nb_masques) {
                     $citoyen->distribue2();
                 }
             }
 
-            if ($inscription->foyer->nb_masques != '') {
+            if ($inscription->foyer->nb_masques != '' && $membres->count() < $citoyen->foyer->nb_masques) {
                 $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
             }
         }
@@ -249,27 +249,34 @@ class DistributionController extends Controller
             $foyer = request()->session()->get('foyer');
             $inscription = request()->session()->get('inscription');
 
-            $inscription->save();
+            if($inscription != null){
+                $inscription->save();
+            }
 
-            $foyer->inscription()->associate($inscription);
-            $foyer->save();
+            if($foyer!=null){
+                $foyer->inscription()->associate($inscription);
+                $foyer->save();
+                foreach($membres as $citoyen){
+                    $citoyen->timestamps = true;
+                    $citoyen->foyer()->associate($foyer);
+                    $citoyen->distribue = true;
+                    $citoyen->save();
+                    if ($citoyen->foyer->nb_masques == '' || $membres->count() > $citoyen->foyer->nb_masques) {
+                        $citoyen->distribue2();
+                    }
+                }
 
-            foreach($membres as $citoyen){
-                $citoyen->foyer()->associate($foyer);
-                $citoyen->distribue = true;
-                $citoyen->save();
-                if ($citoyen->foyer->nb_masques == '') {
-                    $citoyen->distribue2();
+                
+                if ($inscription->foyer->nb_masques != '' && $membres->count() <= $citoyen->foyer->nb_masques) {
+                    $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
                 }
             }
 
-            if ($inscription->foyer->nb_masques != '') {
-                $inscription->foyer->quartier->distribueNbr($inscription->foyer->nb_masques);
-            }
+
 
             $quartier = request()->session()->get('quartierDistribution');
 
             request()->session()->forget(['inscription','citoyens','membres','foyer']);
-            return redirect(route('distribution.list', compact('quartier')))->withSuccess('Inscription validée');
+            return redirect(route('distribution.list',['quartier'=>$quartier], compact('quartier')))->withSuccess('Inscription validée');
         }
 }

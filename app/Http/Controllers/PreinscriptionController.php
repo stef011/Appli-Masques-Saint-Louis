@@ -60,6 +60,7 @@ class PreinscriptionController extends Controller
 
        if (Auth::user()->role->role == 'distribution') {
           $quartier = request()->session()->get('quartierDistribution');
+          return redirect(route('distribution.confirm'));
           return view('preinscription.show', compact(['citoyen', 'membres', 'quartier']));
        }
         return view('preinscription.show', compact(['citoyen', 'membres']));

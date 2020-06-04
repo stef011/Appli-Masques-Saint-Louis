@@ -92,21 +92,27 @@ Pré-Inscription
                 </div>
                 @endif
                 <div class="form-group col-md-5">
-                    <label for="Quartier">Point de retrait</label>
-                    <select name="quartier" id="quartier" class="form-control @error('quartier') is-invalid @enderror"
-                        @if(Auth::user()->role->role == 'distribution') readOnly @endif required>
-                        @foreach ($quartiers as $quart)
-                        <option value="{{ $quart->id }}" @if(isset($quartier) && $quartier==$quart) selected @endif>
-                            {{ $quart->nom }}</option>
-                        @endforeach
-                    </select>
-                    @error('quartier')
-                    <p class="invalid-feedback">{{ $message }}</p>
-                    @enderror
+                    <div @if (Auth::user()->role->role ==
+                        'distribution')
+                        hidden
+                        @endif>
+                        <label for="Quartier">Point de retrait</label>
+                        <select name="quartier" id="quartier"
+                            class="form-control @error('quartier') is-invalid @enderror" @if(Auth::user()->role->role ==
+                            'distribution') readOnly @endif required>
+                            @foreach ($quartiers as $quart)
+                            <option value="{{ $quart->id }}" @if(isset($quartier) && $quartier==$quart) selected @endif>
+                                {{ $quart->nom }}</option>
+                            @endforeach
+                        </select>
+                        @error('quartier')
+                        <p class="invalid-feedback">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
-            <div class="form-row mt-auto justify-content-between">
+            <div class="form-row mt-auto justify-content-between" hidden>
                 <div class="form-group col-md-5">
                     <label for="prioritaire">Prioritaire *</label>
                     <select name="prioritaire" id="prioritaire"
@@ -131,7 +137,7 @@ Pré-Inscription
             {{-- @if (Auth::user()->role->role != 'distribution') --}}
             <div class="form-row mt-auto justify-content-between">
                 <div class="col-md-5">
-                    <label for="nb_masques">Nombre de masques (facultatif)</label>
+                    <label for="nb_masques">Nombre de masques</label>
                     <input type="number" name="nb_masques" id="nb_masques" class="form-control">
                 </div>
             </div>

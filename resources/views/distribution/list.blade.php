@@ -46,7 +46,7 @@ Liste des citoyens
             @foreach ($citoyens as $key=>$citoyen)
             <tr
                 class="{{ $citoyen->distribue == 1 && $citoyen->distrib2 != null ? 'table-success' : ( $citoyen->distribue == 1 ? 'table-warning' : '') }}">
-                <th scope="row">{{ $key+1 }}</th>
+                <th scope="row">{{ $citoyens->firstItem() + $key }}</th>
                 <td>{{ $citoyen->nom }}</td>
                 <td>{{ $citoyen->prenom }}</td>
                 <td>{{ date('d-m-Y', strtotime($citoyen->date_de_naissance)) }}</td>

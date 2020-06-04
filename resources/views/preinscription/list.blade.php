@@ -33,7 +33,7 @@ Liste des préinscriptions
         <tbody>
             @foreach ($citoyens as $key=>$citoyen)
             <tr>
-                <th scope="row">{{ $key+1 }}</th>
+                <th scope="row">{{ $citoyens->firstItem() + $key }}</th>
                 <td>{{ $citoyen->nom }}</td>
                 <td>{{ $citoyen->prenom }}</td>
                 <td>{{ date('d-m-Y', strtotime($citoyen->date_de_naissance)) }}</td>

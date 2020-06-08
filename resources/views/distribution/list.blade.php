@@ -33,7 +33,7 @@ Liste des citoyens
             <th scope="col">Date de Naissance</th>
             <th scope="col"><a
                     href="{{ route('distribution.list', ['sort'=>'prio','quartier'=>$quartier]) }}">Priorité</a></th>
-            <th scope="col">Numéro de téléphone</th>
+            <th scope="col">Contact</th>
             <th scope="col">Numéro de demande</th>
             <th scope="col">Nombres de personnes du foyer</th>
             <th scope="col">Adresse</th>
@@ -51,7 +51,9 @@ Liste des citoyens
                 <td>{{ $citoyen->prenom }}</td>
                 <td>{{ date('d-m-Y', strtotime($citoyen->date_de_naissance)) }}</td>
                 <td>{{ $citoyen->prioritaire == 1 ? 'Oui' : 'Non' }}</td>
-                <td>{{ $citoyen->tel }}</td>
+                <td>{!! $citoyen->tel ? $citoyen->tel : ($citoyen->email ? $citoyen->email :
+                    '<i class="fas fa-slash"></i>') !!}
+                </td>
                 <td>{{ $citoyen->inscription()->numero }}</td>
                 <td>{{ $citoyen->foyer->nb_masques  > $citoyen->foyer->citoyens->count() ? $citoyen->foyer->nb_masques : $citoyen->foyer->citoyens->count() }}
                 </td>

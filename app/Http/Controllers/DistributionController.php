@@ -124,6 +124,8 @@ class DistributionController extends Controller
         })
         ->orwhere('nom', 'like', '%'.request('search').'%')
         ->orWhere('prenom', 'like','%'.request('search').'%')
+        ->orWhere('email', 'like','%'.request('search').'%')
+        ->orWhere('tel', 'like','%'.request('search').'%')
         ->where('distribue',false)
         ->paginate('25');
         request()->session()->put(['quartierDistribution'=>$quartier]);
@@ -144,6 +146,9 @@ class DistributionController extends Controller
         {
             return $item->tel != '' || $item->email!='';
         })->first();
+        if(!$citoyen){
+            $citoyen = $inscription->citoyens()->first();
+        }
         $membres = $inscription->citoyens();
 
         request()->session()->put(['quartierDistribution'=>$quartier]);

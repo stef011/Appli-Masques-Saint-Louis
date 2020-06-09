@@ -191,6 +191,7 @@ class DistributionController extends Controller
                     }
                 }else{
                     $citoyen->distrib2 = Carbon::now()->toDateTimeString();
+                    $citoyen->foyer->quartier()->associate(Quartier::where('nom', 'police')->get()->first())->save();
                     $citoyen->save();
                     if ($citoyen->foyer->nb_masques == '' || $membres->count() > $citoyen->foyer->nb_masques) {
                         // dd('fait');

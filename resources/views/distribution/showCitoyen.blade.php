@@ -75,7 +75,8 @@
         </form>
 
         @endif
-        @if(!$citoyen->distrib2)
+        @if(!$citoyen->distrib2 || Auth::user()->quartiers->filter(function($item){return strtolower($item->nom) ==
+        'police';})->count() > 0)
         <a href="{{ route('distribution.validate', ['quartier'=>$quartier->id, 'inscription' => $inscription->numero]) }}"
             class="btn btn-success btn-shadow">Valider
             la {{ $citoyen->distribue ? 'seconde' : '' }} distribution</a>

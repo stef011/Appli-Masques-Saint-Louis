@@ -41,6 +41,12 @@
             <p class="h4 d-inline mr-3">Connecté en tant que <span
                     class="font-weight-bold">{{ Auth::user()->login }}</span></p>
             <a href="{{ route('logout') }}" class="btn btn-lg btn-light btn-shadow">Déconnexion</a>
+            @if (Auth::user()->quartiers->filter(function ($item)
+            {
+            return strtolower($item['nom']) == strtolower('police');
+            })->first() != null)
+            <p>Masques distribués : {{ Auth::user()->quartiers->where('nom', 'Police')->first()->distribue}}</p>
+            @endif
         </div>
         @endauth
         @guest

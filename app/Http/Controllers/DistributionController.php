@@ -103,7 +103,7 @@ class DistributionController extends Controller
         }else{
             $citoyens = Citoyen::whereHas('foyer.quartier', function ($querry) use($quartier){
                 $querry->where('id', $quartier->id);
-            })->simplePaginate('25');
+            })->orderByRaw('COALESCE(distrib2, updated_at) DESC')->simplePaginate('25');
         }
         request()->session()->put(['quartierDistribution'=>$quartier]);
         return view('distribution.list', compact(['quartier', 'citoyens']));

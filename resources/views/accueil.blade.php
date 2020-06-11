@@ -5,7 +5,11 @@ Accueil
 @endsection
 
 @section('head')
-<meta http-equiv="refresh" content="20;url=https://www.saint-louis.fr/Accueil+minisite+Saint_Louis/373/16002" />
+@if (!preg_match('#^10\..+#', Request::ip()))
+<meta http-equiv="refresh" content="0;url=https://www.saint-louis.fr/Accueil+minisite+Saint_Louis/373/16002" />
+@else
+<meta http-equiv="refresh" content="0; url=/login">
+@endif
 @endsection
 
 @section('content')
@@ -15,6 +19,9 @@ Accueil
     Distribution</a>
     <a href="{{ route('inscription.get') }}" class="btn btn-primary btn-shadow mt-5 btn-lg">Modifier mon inscription</a>
     --}}
+
+
+
     <div class="m-auto">
         <h2 class="h1">Les inscriptions ont été clôturées, vous allez être redirigé dans
             <span id="counter"></span> secondes
@@ -25,7 +32,7 @@ Accueil
 
 @section('script')
 
-<script type="text/javascript">
+{{-- <script type="text/javascript">
     var countDownDate = new Date();
     countDownDate.setSeconds(countDownDate.getSeconds() + 20);
     countDownDate = countDownDate.getTime();
@@ -55,5 +62,5 @@ Accueil
 
     }, 1000);
 
-</script>
+</script> --}}
 @endsection

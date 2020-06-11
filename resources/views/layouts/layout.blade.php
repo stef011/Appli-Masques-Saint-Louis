@@ -43,9 +43,14 @@
             <a href="{{ route('logout') }}" class="btn btn-lg btn-light btn-shadow">Déconnexion</a>
             @if (Auth::user()->quartiers->filter(function ($item)
             {
-            return strtolower($item['nom']) == strtolower('police');
+            return strtolower($item['nom']) == strtolower('Police Municipale');
             })->first() != null)
-            <p>Masques distribués : {{ Auth::user()->quartiers->where('nom', 'Police')->first()->distribue}}</p>
+            <p class="h3">Masques distribués :
+                {{ Auth::user()->quartiers->filter(function ($item)
+            {
+            return strtolower($item['nom']) == strtolower('police municipale');
+            })->first()->distribue}}
+            </p>
             @endif
         </div>
         @endauth

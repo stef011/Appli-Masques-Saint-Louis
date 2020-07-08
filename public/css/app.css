@@ -10882,6 +10882,14 @@ a.text-dark:focus {
   }
 }
 
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
 header {
   background: #e7e7e7;
 }

@@ -6,7 +6,7 @@ Accueil
 
 @section('head')
 @if (!preg_match('#^10\..+#', Request::ip()))
-<meta http-equiv="refresh" content="0;url=https://www.saint-louis.fr/Accueil+minisite+Saint_Louis/373/16002" />
+{{-- <meta http-equiv="refresh" content="0;url=https://www.saint-louis.fr/Accueil+minisite+Saint_Louis/373/16002" /> --}}
 @else
 <meta http-equiv="refresh" content="0; url=/login">
 @endif

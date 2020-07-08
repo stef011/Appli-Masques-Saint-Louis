@@ -73,6 +73,12 @@
 
     @yield('script')
 
+    <footer class="m-4 position-absolute" style="bottom: 0; left: 0; right: 0;">
+        <div class="float-right">
+            <a href="{{ route('rgpd') }}">Traitements des données</a>
+        </div>
+    </footer>
+
 </body>
 
 </html>

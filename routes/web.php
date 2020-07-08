@@ -128,6 +128,8 @@ Route::group(['prefix'=>'list', 'as'=>'list', 'middleware'=>'auth'], function(){
     
 });
 
+// RGPD
+Route::get('/rgpd', 'HomeController@rgpd')->name('rgpd');
 
 // Autocomplete Route
 Route::post('/citoyens', 'CitoyenController@get')->name('citoyens');

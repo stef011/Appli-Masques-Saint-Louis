@@ -46,4 +46,9 @@ class HomeController extends Controller
         return view('accueil');
     }
 
+    public function rgpd()
+    {
+        return view('rgpd');
+    }
+
 }

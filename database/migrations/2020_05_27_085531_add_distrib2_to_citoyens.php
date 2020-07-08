@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRuesTable extends Migration
+class AddDistrib2ToCitoyens extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateRuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rues', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom');
-            $table->timestamps();
+        Schema::table('citoyens', function (Blueprint $table) {
+            $table->dateTime('distrib2')->nullable()->default(null);
         });
     }
 
@@ -27,6 +25,8 @@ class CreateRuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rues');
+        Schema::table('citoyens', function (Blueprint $table) {
+            $table->dropColumn('distrib2');
+        });
     }
 }

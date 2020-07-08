@@ -12,4 +12,7 @@ class Rue extends Model
     {
         return $this->hasMany(Foyer::class);
     }
+    public function quartier(){
+        return $this->belongsTo(Quartier::class);
+    }
 }

@@ -21,7 +21,7 @@
 @section('content')
 <div class="m5">
     <form method="post" action="{{ route('distribution.create', ['quartier'=>$quartier->id]) }}"
-        class="w-75 m-auto table-responsive">
+        class="w-75 m-auto table-responsive" style="max-width: 200rem">
         @csrf
 
         <table class="table table-striped table-bordered m-auto h5 text-center">
